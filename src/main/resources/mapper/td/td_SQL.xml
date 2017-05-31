@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mapper namespace="td">
+	<select id="selectDayList" 
+			paramterType="traveldiary/td/dto/DayListViewDTO.java"
+			resultType="">
+	</select>
+
+	<select id="selectmDiaryList"
+			paramterType="Integer"
+			resultType="traveldiary/td/dto/DiaryDTO.java">
+		<![CDATA[
+			SELECT
+				MEMBER_NUM,
+				DIARY_VOLUM,
+				DIARY_TITLE,
+				TIME,
+				START_DAY,
+				END_DAY,
+				LOCATION_CODE,
+				DIARY_COVER,
+				P_CODE
+			FROM
+				DIARY
+			WHERE MEMBER_NUM = #{mnum}
+		]]>
+	</select>
+	
+	<select id="selectMember"
+			paramterType="traveldiary/td/dto/MemberDTO.java"
+			resultType="traveldiary/td/dto/MemberDTO.java">
+		<![CDATA[
+			SELECT
+				MEMBER_NUM,
+				MEMBER_NAME,
+				MEMBER_ID,
+				MEMBER_PW,
+				MEMBER_PWINFO,
+				MEMBER_PWAN,
+				MEMBER_EMAIL
+			FROM
+				MEMBER
+			WHERE
+				MEMBER ID = #{MEMBER_NUM}
+		]]>		
+	</select>
+			
+		
+
+</mapper>
