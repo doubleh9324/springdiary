@@ -140,16 +140,12 @@ public class AbstractDAO {
         return sqlSession.selectList(queryId, map);
     }
 
-    @SuppressWarnings("unchecked")
-    public List<MemberDTO> selectMemberList(String queryId){
-    	printQueryId(queryId);
-    	
-    	
-		return null;
-    	
-    	
+    //list를 dto로 변환해야 할 것 같당ㅇㅇㅇㅇ
+    @SuppressWarnings("rawtypes")
+    public List selectMember(String queryId, Object params){
+        printQueryId(queryId);
+        return sqlSession.selectList(queryId,params);
     }
-    
 
 
 

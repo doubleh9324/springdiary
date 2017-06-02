@@ -25,14 +25,11 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 			HttpSession session = request.getSession(false);
 			
 			if(session == null){
-				System.out.println("세션없음");
 			} else {
-				System.out.println("세션 존재");
 				MemberDTO member = (MemberDTO)session.getAttribute("member");
 				session.setAttribute("userNum", 0);
 				
 				if(member == null){
-					System.out.println("member 세션없음");
 				}
 			}
 			

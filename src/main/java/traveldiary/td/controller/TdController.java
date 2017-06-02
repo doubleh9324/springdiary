@@ -1,6 +1,7 @@
 package traveldiary.td.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -97,15 +98,26 @@ public class TdController {
 	}
 	
 	@RequestMapping(value="/td/logincheck.do")
-	public ModelAndView doLogin(MemberDTO member) throws Exception{
-		String resultURL = tdService.doLogin(member);
+	public ModelAndView doLogin(HttpServletRequest request , MemberDTO member) throws Exception{
+		
+		String resultURL = null;
+		Map<String, Object> resultMap = tdService.doLogin(member);	
+		MemberDTO m = (MemberDTO)resultMap.get("member");
+		
+		//로그인 성공시
+		if(resultMap.get("result").equals("1001")){
+			HttpSession session = request.getSession(true);
+			session.setAttribute("userNum", m.getMember_num());
+			resultURL = "redirect:/td/main.do";
+		} else {
+			resultURL = "redirect:/td/login.do";
+		}
 		
 		
 		
 		
-		
-		ModelAndView mv = new ModelAndView("redirect : /td/main");
-		tdService.doLogin(member);
+		ModelAndView mv = new ModelAndView(resultURL);
+		mv.addObject("loginRe",resultMap);
 		
 		return mv;
 	}

@@ -8,14 +8,8 @@
 </head>
 <body>
 
-<form name="form" method="post" autocomplete="off">
-ID <input type="text" name="member_id" size="20"> &nbsp; 
-PW <input type="password" name="member_pw" size="20">
 
-<input type="submit" value="LogIn" onclick="document.form.action="LoginJudge.jsp";"><br>
-</form>
-
-<form id="login" name="login" method="post" action="/td/logincheck.do">
+<form id="login" name="login" method="post" action="/TravelDiary/td/logincheck.do">
 	ID <input type="text" name="member_id" size="20"> &nbsp; 
 	PW <input type="password" name="member_pw" size="20">
 	<button>Àü¼Û</button>

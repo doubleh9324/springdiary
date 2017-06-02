@@ -12,7 +12,7 @@ public class LoggerAspect {
     static String name = "";
     static String type = "";
      
-    @Around("execution(* first..controller.*Controller.*(..)) or execution(* first..service.*Impl.*(..)) or execution(* first..dao.*DAO.*(..))")
+    @Around("execution(* traveldiary..controller.*Controller.*(..)) or execution(* traveldiary..service.*Impl.*(..)) or execution(* traveldiary..dao.*DAO.*(..))")
     public Object logPrint(ProceedingJoinPoint joinPoint) throws Throwable {
         type = joinPoint.getSignature().getDeclaringTypeName();
          

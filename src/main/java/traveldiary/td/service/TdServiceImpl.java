@@ -1,6 +1,8 @@
 package traveldiary.td.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -57,15 +59,28 @@ public class TdServiceImpl implements TdService {
 	}
 
 	//로그인 service 
+	@SuppressWarnings("null")
 	@Override
-	public String doLogin(MemberDTO member) throws Exception {
+	public Map<String, Object> doLogin(MemberDTO member) throws Exception {
 		MemberDTO memberinfo = tdDao.doLogin(member);
 		
-		if(memberinfo == null){
-			
+		String re = "-1";
+		String inputpw = member.getMember_pw();
+		
+		//멤버 정보가 존재할 때
+		if(memberinfo != null){
+			//해당하는 아이디와 입력한 아이디의 비밀번호가 같으면 true 반환
+			if(memberinfo.getMember_pw().equals(inputpw)){
+				re = "1001"; 
+			} else {
+				re = "-1";
+			}
 		}
 		
-		return null;
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("result", re);
+		result.put("member", memberinfo);
+		return result;
 	}
 
 	/*

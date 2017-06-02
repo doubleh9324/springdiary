@@ -36,8 +36,11 @@ public class tdDAO extends AbstractDAO{
 		return (List<DiaryDTO>)selectList("td.selectmDiaryList",mnum );
 	}
 	
+	
 	public MemberDTO doLogin(MemberDTO member) throws Exception{
-		return (MemberDTO) selectList("td.selectMember", member);
+		String m = member.getMember_id();
+		
+		return (MemberDTO) selectOne("sample.test", m);
 	}
 
 
