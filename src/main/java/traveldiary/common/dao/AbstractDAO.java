@@ -64,6 +64,7 @@ public class AbstractDAO {
         return sqlSession.selectList(queryId,params);
     }
     
+    
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public Map selectPagingListEgov(String queryId, Object params){
         printQueryId(queryId);

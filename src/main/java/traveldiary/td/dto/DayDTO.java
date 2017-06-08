@@ -13,11 +13,12 @@ public class DayDTO {
 	private int hits;
 	private Date day_time;
 	private String p_code;
+	private String del_flag;
 	
 	public DayDTO(){}
 	
 	public DayDTO(int mnum, int dvol, int dnum, String title, String contents, 
-			int scnt, Date time, int hits, Date dtime, String pcode ){
+			int scnt, Date time, int hits, Date dtime, String pcode, String del_flag ){
 		this.member_num = mnum;
 		this.diary_volum = dvol;
 		this.day_num = dnum;
@@ -28,6 +29,7 @@ public class DayDTO {
 		this.hits = hits;
 		this.day_time = dtime;
 		this.p_code = pcode;
+		this.del_flag = del_flag;
 	}
 	
 	//글을 작성한 회원번호. 
@@ -121,4 +123,14 @@ public class DayDTO {
 	public String getP_code(){
 		return this.p_code;
 	}
+
+	public String getDel_flag() {
+		return del_flag;
+	}
+
+	public void setDel_flag(String del_flag) {
+		this.del_flag = del_flag;
+	}
+	
+	
 }

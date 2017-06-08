@@ -9,7 +9,16 @@ public class MemberDTO {
 	private String member_pwinfo;
 	private String member_pwan;
 	private String member_email;
+	private String del_flag;
 	
+	public String getDel_flag() {
+		return del_flag;
+	}
+
+	public void setDel_flag(String del_flag) {
+		this.del_flag = del_flag;
+	}
+
 	//회원 번호
 	public int getMember_num() {
 		return member_num;

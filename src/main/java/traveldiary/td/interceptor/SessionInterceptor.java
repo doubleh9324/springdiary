@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -13,10 +15,10 @@ import traveldiary.td.dto.MemberDTO;
 @Service
 public class SessionInterceptor extends HandlerInterceptorAdapter {
 
-	Logger log = Logger.getLogger(this.getClass());
+	protected Log log = LogFactory.getLog(SessionInterceptor.class);
 	
 	/**preHandle : 클라이언트의 요청을 컨트롤러에 전달하기 전에 호출
-	 *  return false인 경우 intercepter ot controller 실행없이 요청종료
+	 *  return false인 경우 intercepter or controller 실행없이 요청종료
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
@@ -24,13 +26,24 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 		try{
 			HttpSession session = request.getSession(false);
 			
+			//세션이 아예 존재하지 않으면
 			if(session == null){
+				//그냥냅둬
 			} else {
-				MemberDTO member = (MemberDTO)session.getAttribute("member");
-				session.setAttribute("userNum", 0);
+				//세션이 존재하면
+				//MemberDTO member = (MemberDTO)session.getAttribute("member");
 				
-				if(member == null){
+				//세션이 존재하긴하는데
+				String userNum = (String)session.getAttribute("userNum");
+				
+				//사용자 번호가 없는 정보면 0으로 설정
+				if(userNum == null){
+					session.setAttribute("userNum", "0");
 				}
+			}
+			
+			if(log.isDebugEnabled()){
+				log.debug(" Session Info \t:  " + session.getAttribute("userNum"));
 			}
 			
 		} catch (Exception e){

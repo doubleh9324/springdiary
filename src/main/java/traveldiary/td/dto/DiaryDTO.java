@@ -10,9 +10,10 @@ public class DiaryDTO {
 	private Date time;
 	private Date start_day;
 	private Date end_day;
-	private String location;
-	private String cover;
+	private String location_code;
+	private String diary_cover;
 	private String p_code;
+	private String del_flag;
 
 	
 	
@@ -64,20 +65,20 @@ public class DiaryDTO {
 		return this.end_day;
 	}
 	
-	public void setLocation(String loc){
-		this.location = loc;
+	public void setLocation_code(String loc){
+		this.location_code = loc;
 	}
 	
-	public String getLocation(){
-		return this.location;
+	public String getLocation_code(){
+		return this.location_code;
 	}
 	
-	public void setCover(String cov){
-		this.cover = cov;
+	public void setDiary_cover(String cov){
+		this.diary_cover = cov;
 	}
 	
-	public String getCover(){
-		return this.cover;
+	public String getDiary_cover(){
+		return this.diary_cover;
 	}
 	
 	public void setP_code(String pcode){
@@ -86,5 +87,20 @@ public class DiaryDTO {
 	
 	public String getP_code(){
 		return this.p_code;
+	}
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
+	public String getDel_flag() {
+		return del_flag;
+	}
+
+	public void setDel_flag(String del_flag) {
+		this.del_flag = del_flag;
 	}
 }

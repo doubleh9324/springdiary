@@ -167,24 +167,7 @@
 	    ]]>
 	</update>
 
-	<select id="test"
-			parameterType="string"
-			resultType="traveldiary.td.dto.MemberDTO">
-		<![CDATA[
-			SELECT
-				MEMBER_NUM,
-				MEMBER_NAME,
-				MEMBER_ID,
-				MEMBER_PW,
-				MEMBER_PWINFO,
-				MEMBER_PWAN,
-				MEMBER_EMAIL
-			FROM
-				MEMBER
-			WHERE
-				MEMBER_ID = #{m}
-		]]>		
-	</select>
+	
 
 
 

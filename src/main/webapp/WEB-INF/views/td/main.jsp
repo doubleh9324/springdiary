@@ -4,14 +4,36 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>Insert title here</title>
+<title>Travel Diary</title>
+<link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet">
+
 </head>
 <body>
-main
+<%@include file="/WEB-INF/include/include-header.jspf" %>
 
+
+<!-- start : Home-->
+
+		<!-- start : Container -->
+		<div class="container pagebox" >
+		
+			<!-- start : navigation -->
+			<%@include file="navBar.html" %>
+			<!-- end : navigation -->
+			
+			<%@include file="main_cam.html" %>
+		</div>
+		<!-- end : Container -->
+<!-- end : Home -->
+			
+			
 I'm a ${diaryflag}
-
+<br>
 
 <a href="/TravelDiary/td/login.do">login</a>
+<a href="/TravelDiary/td/logout.do">logout</a>
+
+
+<%@include file="/WEB-INF/include/include-bottom.jspf" %>
 </body>
 </html>

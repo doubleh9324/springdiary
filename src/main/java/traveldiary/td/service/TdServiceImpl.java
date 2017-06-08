@@ -40,8 +40,9 @@ public class TdServiceImpl implements TdService {
 	}
 
 
+	@SuppressWarnings("null")
 	@Override
-	public List<DiaryDTO> getmDiaryList(int mnum) throws Exception {
+	public Map<String, Object> getmDiaryList(int mnum) throws Exception {
 		
 		if(mnum==0){
 			//회원 번호가 0일 경우 == 로그인이 되지 않은 경우 : mydiary 표시하지 않음
@@ -50,16 +51,20 @@ public class TdServiceImpl implements TdService {
 			//회원 번호가 상수일 경우 && 사용자 번호와 같을 경우 : mydiary 표시
 		}
 		
-		List<DiaryDTO> diaryList = null;
+		Map<String, Object> resultmap  = new HashMap<String, Object>();
 		
-		diaryList = tdDao.selectmDiaryList(mnum);
+		List<DiaryDTO> diarylist = tdDao.selectmDiaryList(mnum);
 		
-		return diaryList;
+		System.out.println(diarylist.get(0).getDiary_title());
+		
+		resultmap.put("diaryList", diarylist);
+		resultmap.put("total",tdDao.selectmDLTotal(mnum));
+		
+		return resultmap;
 		
 	}
 
 	//로그인 service 
-	@SuppressWarnings("null")
 	@Override
 	public Map<String, Object> doLogin(MemberDTO member) throws Exception {
 		MemberDTO memberinfo = tdDao.doLogin(member);
@@ -82,6 +87,10 @@ public class TdServiceImpl implements TdService {
 		result.put("member", memberinfo);
 		return result;
 	}
+	
+//	public boolean doLogout() throws Exception{
+		
+//	}
 
 	/*
 	@Override

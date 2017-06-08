@@ -33,14 +33,18 @@ public class tdDAO extends AbstractDAO{
 	
 	@SuppressWarnings("unchecked")
 	public List<DiaryDTO> selectmDiaryList(int mnum) throws Exception{
-		return (List<DiaryDTO>)selectList("td.selectmDiaryList",mnum );
+		List<DiaryDTO> result = (List<DiaryDTO>)selectList("td.selectmDiaryList",mnum);
+		return result;
 	}
 	
-	
 	public MemberDTO doLogin(MemberDTO member) throws Exception{
-		String m = member.getMember_id();
+		String mid = member.getMember_id();
 		
-		return (MemberDTO) selectOne("sample.test", m);
+		return (MemberDTO) selectOne("td.selectMember", mid);
+	}
+	
+	public int selectmDLTotal(int mnum) throws Exception{
+		return (Integer) selectOne("td.selectmDLCount", mnum);
 	}
 
 

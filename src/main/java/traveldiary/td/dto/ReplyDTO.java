@@ -8,7 +8,24 @@ public class ReplyDTO {
 	private int member_num;
 	private Date time;
 	private int reply_num;
+	private String del_flag;
 	
+	public int getDay_reply() {
+		return day_reply;
+	}
+
+	public void setDay_reply(int day_reply) {
+		this.day_reply = day_reply;
+	}
+
+	public String getDel_flag() {
+		return del_flag;
+	}
+
+	public void setDel_flag(String del_flag) {
+		this.del_flag = del_flag;
+	}
+
 	public void setReply(String reply){
 		this.reply = reply;
 	}
