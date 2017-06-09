@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="td">
+
+	<select id="selectMember"
+			parameterType="string"
+			resultType="traveldiary.td.dto.MemberDTO">
+		<![CDATA[
+			SELECT
+				MEMBER_NUM,
+				MEMBER_NAME,
+				MEMBER_ID,
+				MEMBER_PW,
+				MEMBER_PWINFO,
+				MEMBER_PWAN,
+				MEMBER_EMAIL
+			FROM
+				MEMBER
+			WHERE
+				MEMBER_ID = #{mid} AND DEL_FLAG = 'n'
+				
+		]]>		
+	</select>
+	
+	
+	<select id="selectmDiaryList"
+			parameterType="string"
+			resultMap="diary">
+		<![CDATA[
+			SELECT
+				MEMBER_NUM,
+				DIARY_VOLUM,
+				DIARY_TITLE,
+				TIME,
+				START_DAY,
+				END_DAY,
+				LOCATION_CODE,
+				DIARY_COVER,
+				P_CODE
+			FROM
+				DIARY
+			WHERE
+				MEMBER_NUM = #{mnum} AND DEL_FLAG = 'n'
+		]]>		
+	</select>	
+	
+	<select id="selectmDLCount"
+			parameterType="string"
+			resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				DIARY
+			WHERE
+				MEMBER_NUM = #{mnum} AND DEL_FLAG = 'n'
+		
+		]]>		
+			
+	</select>
+	
+	<resultMap type="traveldiary.td.dto.DiaryDTO" id="diary">
+		<result property="member_num" column="MEMBER_NUM"/>
+		<result property="diary_volum" column="DIARY_VOLUM"/>
+		<result property="diary_title" column="DIARY_TITLE"/>
+		<result property="time" column="TIME"/>
+		<result property="start_day" column="START_DAY"/>
+		<result property="end_day" column="END_DAY"/>
+		<result property="location_code" column="LOCATION_CODE"/>
+		<result property="diary_cover" column="DIARY_COVER"/>
+		<result property="p_code" column="P_CODE"/>
+	</resultMap>
+	
+</mapper>
