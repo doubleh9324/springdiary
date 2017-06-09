@@ -166,7 +166,7 @@ public class TdController {
 			//로그인된 상태, 개인 일기장 목록 가져오기
 			resultmap = (Map<String, Object>) tdService.getmDiaryList(Integer.parseInt(userNum));
 			mv.addObject("diaryflag", "member");
-			mdiary = (List<DiaryDTO>) resultmap.get("diarylist");
+			mdiary = (List<DiaryDTO>) resultmap.get("diaryList");
 			total = (Integer) resultmap.get("total");
 			mv.addObject("total", total);
 		}
