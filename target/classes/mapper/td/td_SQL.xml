@@ -26,7 +26,7 @@
 	
 	
 	<select id="selectmDiaryList"
-			parameterType="string"
+			parameterType="hashmap"
 			resultMap="diary">
 		<![CDATA[
 			SELECT
@@ -43,10 +43,11 @@
 				DIARY
 			WHERE
 				MEMBER_NUM = #{mnum} AND DEL_FLAG = 'n'
+			LIMIT #{pnum}, 9
 		]]>		
 	</select>	
 	
-	<select id="selectmDLCount"
+	<select id="selectmDiaryLCount"
 			parameterType="string"
 			resultType="int">
 		<![CDATA[
@@ -61,6 +62,33 @@
 			
 	</select>
 	
+	<select id="selectProgress"
+			parameterType="hashmap"
+			resultType="hashmap">
+		<![CDATA[
+			SELECT
+				MEMBER_NUM,
+				DIARY_VOLUM,
+				PERCENT
+			FROM
+				V_PROGRESS
+		]]>
+	</select>
+	
+	<select id="selectmProgress"
+			parameterType="hashmap"
+			resultType="hashmap">
+		<![CDATA[
+			SELECT
+				diary_volum,
+				percent
+			FROM
+				V_PROGRESS
+			WHERE
+				MEMBER_NUM = #{mnum} 
+		]]>
+	</select>
+	
 	<resultMap type="traveldiary.td.dto.DiaryDTO" id="diary">
 		<result property="member_num" column="MEMBER_NUM"/>
 		<result property="diary_volum" column="DIARY_VOLUM"/>
@@ -72,5 +100,7 @@
 		<result property="diary_cover" column="DIARY_COVER"/>
 		<result property="p_code" column="P_CODE"/>
 	</resultMap>
+	
+	
 	
 </mapper>

@@ -42,27 +42,25 @@ public class TdServiceImpl implements TdService {
 
 	@SuppressWarnings("null")
 	@Override
-	public Map<String, Object> getmDiaryList(int mnum) throws Exception {
+	public Map<String, Object> getmDiaryList(Map<String, Object> map) throws Exception {
 		
-		if(mnum==0){
-			//회원 번호가 0일 경우 == 로그인이 되지 않은 경우 : mydiary 표시하지 않음
-			//diarylist 표시
-		} else {
-			//회원 번호가 상수일 경우 && 사용자 번호와 같을 경우 : mydiary 표시
-		}
+		int mnum = (Integer) map.get("mnum");
 		
 		Map<String, Object> resultmap  = new HashMap<String, Object>();
+		List<DiaryDTO> diarylist = tdDao.selectmDiaryList(map);
+
+		List<Map<String, Object>> progress = tdDao.getProgress(mnum);
 		
-		List<DiaryDTO> diarylist = tdDao.selectmDiaryList(mnum);
-		
-		System.out.println(diarylist.get(0).getDiary_title());
 		
 		resultmap.put("diaryList", diarylist);
 		resultmap.put("total",tdDao.selectmDLTotal(mnum));
+		resultmap.put("prog", progress);
 		
 		return resultmap;
-		
 	}
+	
+	
+	
 
 	//로그인 service 
 	@Override

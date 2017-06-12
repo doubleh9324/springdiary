@@ -17,7 +17,7 @@ public interface TdService {
 	
 	testDTO testService() throws Exception;
 
-	Map<String, Object> getmDiaryList(int mnum) throws Exception;
+	Map<String, Object> getmDiaryList(Map<String, Object> map) throws Exception;
 
 	Map<String, Object> doLogin(MemberDTO member) throws Exception;
 }

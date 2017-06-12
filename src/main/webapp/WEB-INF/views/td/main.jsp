@@ -33,7 +33,7 @@ I'm a ${diaryflag}
 <a href="/TravelDiary/td/login.do">login</a>
 <a href="/TravelDiary/td/logout.do">logout</a>
 
-
 <%@include file="/WEB-INF/include/include-bottom.jspf" %>
+
 </body>
 </html>

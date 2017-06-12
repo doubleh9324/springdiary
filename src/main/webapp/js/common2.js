@@ -82,9 +82,7 @@ function ComSubmit(opt_formId) {
                         fv_ajaxCallback(data);
                     }
                     else {
-                    	//fv_ajaxCallback = fv_ajaxCallback+ "(data);";
-                      // new Function(fv_ajaxCallback)(data);
-                    	//fv_ajaxCallback(data);
+
                     	eval(fv_ajaxCallback + "(data);");
                         
                     }
@@ -124,7 +122,7 @@ function gfn_renderPaging(params){
      
     $("#"+divId).empty();
     
-    /*
+    
     var preStr = "";
     var postStr = "";
     var str = "";
@@ -149,7 +147,7 @@ function gfn_renderPaging(params){
     else if(totalIndexCount <=10 && totalIndexCount > 1){ //전체 인덱스가 10보다 작을경우, 맨뒤 태그 작성
         postStr += "<a href='#this' class='pad_5' onclick='_movePage("+totalIndexCount+")'>[>>]</a>";
     }
-    */
+    
     /*
     //목차 리스트 뿌리기
     for(var i=first; i<(first+last); i++){

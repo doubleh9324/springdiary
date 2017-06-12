@@ -69,22 +69,27 @@ public class TdController {
 	public ModelAndView openMainPage(HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView("/td/main");
 	
+		MemberDTO userInfo = null;
 		List<DiaryDTO> mdiary = null;
 		
 		//어떻게 가져오지? 인터셉터에서 컨트롤러로 값을 전달해 줄 수 있나? 일단은 세션에서 바로
 		HttpSession session = request.getSession(false);
-		String userNum = (String)session.getAttribute("userNum");
+		String status = session.getAttribute("status").toString();
 		
 		//로그인 된 경우와 그렇지 않은 경우 고려하기 나중에...
-		if(userNum.equals("0")){
+		//정보가 빈 상태라면
+		if(status.equals("logout")){
 			//손님 계정이니 다이어리 목록은 없닷
 			mv.addObject("diaryflag", "guest");
 		} else {
+			userInfo = (MemberDTO) session.getAttribute("userInfo");
+			
 			//로그인된 상태, 개인 일기장 목록 가져오기
 		//	mdiary = tdService.getmDiaryList(Integer.parseInt(userNum));
 			mv.addObject("diaryflag", "member");
 		}
 		
+		mv.addObject("userInfo", userInfo);
 		mv.addObject("diaryList", mdiary);
 		
 		return mv;
@@ -110,7 +115,8 @@ public class TdController {
 		//로그인 성공시
 		if(resultMap.get("result").equals("1001")){
 			HttpSession session = request.getSession(true);
-			session.setAttribute("userNum", String.valueOf(m.getMember_num()));
+			session.setAttribute("status", "login");
+			session.setAttribute("userInfo", m);
 			resultURL = "redirect:/";
 		} else {
 			resultURL = "redirect:/td/login.do";
@@ -129,9 +135,9 @@ public class TdController {
 		ModelAndView mv = new ModelAndView("redirect:/td/main.do");
 		
 		HttpSession session = request.getSession(false);
-		String userNum = (String)session.getAttribute("userNum");
+		MemberDTO userInfo = null;
 		
-		session.setAttribute("userNum", "0");
+		session.setAttribute("userInfo", userInfo);
 		//tdService.doLogout(userNum);
 		
 		return mv;
@@ -141,7 +147,15 @@ public class TdController {
 	@RequestMapping(value="/td/mydiary.do")
 	public ModelAndView openMydiaryPage(HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView("/td/mydiary");
-
+		
+		HttpSession session = request.getSession(false);
+		String status = session.getAttribute("status").toString();
+		
+		if(status.equals("logout")){
+			mv.addObject("diaryflag", "guest");
+		} else {
+			mv.addObject("diaryflag", "member");
+		}
 		
 		return mv;
 	}
@@ -156,23 +170,33 @@ public class TdController {
 		
 		//어떻게 가져오지? 인터셉터에서 컨트롤러로 값을 전달해 줄 수 있나? 일단은 세션에서 바로
 		HttpSession session = request.getSession(false);
-		String userNum = (String)session.getAttribute("userNum");
+		String status = (String) session.getAttribute("status");
+		
+		int pagenum = Integer.parseInt(request.getParameter("pagenum"));
 		
 		//로그인 된 경우와 그렇지 않은 경우 고려하기 나중에...
-		if(userNum.equals("0")){
+		if(status.equals("logout")){
 			//손님 계정이니 다이어리 목록은 없닷
-			mv.addObject("diaryflag", "guest");
 		} else {
 			//로그인된 상태, 개인 일기장 목록 가져오기
-			resultmap = (Map<String, Object>) tdService.getmDiaryList(Integer.parseInt(userNum));
-			mv.addObject("diaryflag", "member");
+			MemberDTO userInfo = (MemberDTO) session.getAttribute("userInfo");
+			mv.addObject("userInfo", userInfo);
+			
+			//diary dto
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("mnum", userInfo.getMember_num());
+			map.put("pnum", pagenum);
+			resultmap = (Map<String, Object>) tdService.getmDiaryList(map);
 			mdiary = (List<DiaryDTO>) resultmap.get("diaryList");
+
+			//total count
 			total = (Integer) resultmap.get("total");
-			mv.addObject("total", total);
 		}
 		
-		
+		mv.addObject("total", total);
+		mv.addObject("progress", (List<Map<String, Object>>) resultmap.get("prog"));
 		mv.addObject("diaryList", mdiary);
+		
 		
 		return mv;
 	}

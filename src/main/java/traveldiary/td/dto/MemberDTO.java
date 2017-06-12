@@ -82,5 +82,14 @@ public class MemberDTO {
 	public void setMember_email(String email) {
 		this.member_email = email;
 	}
+	
+	
+	public boolean isNull(){
+		boolean re = false;
+		if(!this.member_id.isEmpty())
+			re = true;
+		
+		return re;
+	}
 
 }

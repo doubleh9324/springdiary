@@ -31,7 +31,7 @@
 			return isString(str) && str.indexOf('%') > 0;
 		},
 		isScrollable = function(el) {
-			return (el && !(el.style.overflow && el.style.overflow === 'hidden') && ((el.clientWidth && el.scrollWidth > el.clientWidth) || (el.clientHeight && el.scrollHeight > el.clientHeight)));
+			return (el && !(el.style.overflow && el.style.overflow === 'visible') && ((el.clientWidth && el.scrollWidth > el.clientWidth) || (el.clientHeight && el.scrollHeight > el.clientHeight)));
 		},
 		getScalar = function(value, dim) {
 			value = parseInt(value, 10);
@@ -1131,7 +1131,7 @@
 
 			current.wrap.removeClass('fancybox-tmp');
 
-			current.inner.css('overflow', scrolling === 'yes' ? 'scroll' : (scrolling === 'no' ? 'hidden' : scrolling));
+			current.inner.css('overflow', scrolling === 'yes' ? 'scroll' : (scrolling === 'no' ? 'visible' : scrolling));
 
 			current.pos = $.extend({}, current.dim, F._getPosition( true ));
 
@@ -1212,7 +1212,7 @@
 							body = iframe.contents().find('body');
 
 							if (scrollOut) {
-								body.css('overflow-x', 'hidden');
+								body.css('overflow-x', 'visible');
 							}
 
 							origHeight = body.height();

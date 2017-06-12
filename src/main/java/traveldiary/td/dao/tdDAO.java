@@ -1,6 +1,7 @@
 package traveldiary.td.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -32,8 +33,9 @@ public class tdDAO extends AbstractDAO{
 
 	
 	@SuppressWarnings("unchecked")
-	public List<DiaryDTO> selectmDiaryList(int mnum) throws Exception{
-		List<DiaryDTO> result = (List<DiaryDTO>)selectList("td.selectmDiaryList",mnum);
+	public List<DiaryDTO> selectmDiaryList(Map<String, Object> map) throws Exception{
+		
+		List<DiaryDTO> result = (List<DiaryDTO>)selectList("td.selectmDiaryList", map);
 		return result;
 	}
 	
@@ -44,7 +46,19 @@ public class tdDAO extends AbstractDAO{
 	}
 	
 	public int selectmDLTotal(int mnum) throws Exception{
-		return (Integer) selectOne("td.selectmDLCount", mnum);
+		return (Integer) selectOne("td.selectmDiaryLCount", mnum);
+	}
+	
+	//전체 값을 가져올땐 매개변수없이
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> getProgress() throws Exception{
+		return selectList("td.selectProgress");
+	}
+	
+	//개인 목록을 가져올 땐 매개변수로 mnum받기
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> getProgress(int mnum) throws Exception{
+		return selectList("td.selectmProgress", mnum);
 	}
 
 

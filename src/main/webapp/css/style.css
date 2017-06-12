@@ -1966,6 +1966,7 @@ li.current {
 	transition-property:         transform, opacity;
 }
 
+
 /* Disabling Isotope CSS3 transitions
 =================================================================== */
 
@@ -2627,3 +2628,4 @@ footer #social {
 		padding: 0px;
 	}
 }	
+

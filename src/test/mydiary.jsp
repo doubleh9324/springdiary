@@ -55,7 +55,7 @@
 		<!-- end : filter -->
 		
 		<!-- start : diary list -->
-		<div id="diary-wrapper" class="row-fluid" style="oveflow:visible; position: relative; height: 4410px;">
+		<div id="diary-wrapper" class="row-fluid" style="overflow: visible;">
 				<div id="addlist"></div>
 		</div>
 		<!-- end : diary list -->

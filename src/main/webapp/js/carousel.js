@@ -71,7 +71,7 @@
 						
 						$wrap
 							.css({
-								overflow             : "hidden",
+								overflow             : "visible",
 								width                : "100%"
 							})
 							.attr('role' , 'application');

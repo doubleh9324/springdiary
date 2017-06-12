@@ -30,20 +30,20 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 			if(session == null){
 				//그냥냅둬
 			} else {
-				//세션이 존재하면
-				//MemberDTO member = (MemberDTO)session.getAttribute("member");
 				
-				//세션이 존재하긴하는데
-				String userNum = (String)session.getAttribute("userNum");
-				
-				//사용자 번호가 없는 정보면 0으로 설정
-				if(userNum == null){
-					session.setAttribute("userNum", "0");
+				String status = (String)session.getAttribute("status");
+				//세션이 존재하지만 status란 값은 없어
+				if(status == null){
+					session.setAttribute("status", "logout");
 				}
 			}
 			
+			MemberDTO userInfo = (MemberDTO) session.getAttribute("userInfo");
 			if(log.isDebugEnabled()){
-				log.debug(" Session Info \t:  " + session.getAttribute("userNum"));
+				if(session.getAttribute("status").equals("login"))
+					log.debug(" Session Info \t:  Login " + userInfo.getMember_id()+"("+userInfo.getMember_num()+")");
+				else
+					log.debug(" Session Info \t:  Logout ");
 			}
 			
 		} catch (Exception e){
