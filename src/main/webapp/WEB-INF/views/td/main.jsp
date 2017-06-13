@@ -27,13 +27,8 @@
 <!-- end : Home -->
 			
 			
-I'm a ${diaryflag}
-<br>
-
-<a href="/TravelDiary/td/login.do">login</a>
-<a href="/TravelDiary/td/logout.do">logout</a>
+<input type="hidden" id="identify" name="identify" value="${identify }">
 
 <%@include file="/WEB-INF/include/include-bottom.jspf" %>
-
 </body>
 </html>

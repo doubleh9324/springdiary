@@ -13,7 +13,7 @@
 <!-- start : page - my diary list -->
 
 	<!-- start : Container -->
-<div id="diarylist" class="container color yellow pagebox ">
+	<div id="diarylist" class="container color white pagebox ">
 	
 		<!-- start : navigation -->
 		<%@include file="navBar.html" %>
@@ -34,13 +34,25 @@
 		</div>
 		<!-- end: Page Title -->
 		
-		<center>I'm a ${diaryflag}
-		<b id = "status_id"></b>
-		</center>
-				<div id="lastPostsLoader">추가</div>
-		<!-- start : filter-->
 		<center>
-		<div id="filters">
+		I'm a ${identify}
+		<input type="hidden" id="identify" name="identify" value="${identify}"><br>
+		
+		<div id="wellcome" style="display:none;">
+		Travel Diary에서 새로운 여행 일기를 남겨봐 :D<br><br>
+		<button class="button btn-warning" onclick="window.location='/TravelDiary/td/diarylist.do'">
+		<span>여행일기 맛보기:)</span></button>
+		<button class="button btn-warning" onclick="window.location=''">
+		<span>Join</span></button>
+		<button class="button btn-warning" onclick="window.location='/TravelDiary/td/login.do'">
+		<span>Login</span></button>
+		</div>
+		</center>
+				
+		<!-- start : filter-->
+		
+		<div id="filters" style="display:none;">
+		<center>
 			<ul class="option-set" data-option-key="filter">
 				<li><a href="#filter" class="selected" data-option-value="*">All</a></li>
 				<li>/</li>
@@ -50,8 +62,8 @@
 				<li>/</li>
 				<li><a href="#filter" data-option-value=".full">완성</a></li>
 			</ul>
-		</div>
 		</center>
+		</div>
 		<!-- end : filter -->
 		
 		<!-- start : diary list -->
@@ -64,22 +76,20 @@
 
 		<div id="pagenav"></div>
 		<input type="hidden" id="pagenum" name="pagenum" value="1"/>
+		<input type="hidden" id="totalpnum" name="totalpnum" >
 		
 			</div>
 		<!-- end : Wrapper -->
 		
-			</div>
+	</div>
 	<!-- end : Container -->
-
+<center><div id="lastPostsLoader" style="margin-bottom: 6%"></div></center>
 <%@include file="/WEB-INF/include/include-bottom.jspf" %>
 
 <script type="text/javascript">
     
 $(document).ready(function(){
 	
-	
-	 $('.row-fluid').css("overflow", "visible");
-	 $('.isotope').css("overflow", "visible");
 	 
 	//스크롤 감지
     $(window).scroll(function(){  
@@ -91,8 +101,15 @@ $(document).ready(function(){
 	//로딩중 띄우기
     function lastPostFunc()  
     {  
-        $("#lastPostsLoader").html("로딩중...");  
-        addList();
+		var totalpnum = $("#totalpnum").val();
+		var pnum = $("#pagenum").val();
+		
+		if(pnum < totalpnum){
+	        $("#lastPostsLoader").html("로딩중...");  
+	        addList();
+		} else {
+			 $("#lastPostsLoader").html("없음");
+		}
         
     };  
 
@@ -104,7 +121,7 @@ $(document).ready(function(){
 
     };
 
-
+	/*
 	//해쉬값이 존재하면 그만클 불러오고 포커스 주기, 없으면 첫 페이지 불러오기
 	if(document.location.hash){
 		
@@ -115,13 +132,45 @@ $(document).ready(function(){
 		
 		$("#pagenum").val(page);
 		
+		for(var i=1; i<=page; i++){
+			fn_selectBoardList(i);
+		}
+		
+		location.hash = "#page"+page;
+	}else{
+		if($("#status").val() == "memebr"){
+			fn_selectBoardList(1);
+		}else{
+			$("html, body").css("height", "100%");
+			$("#filters").hide();
+		}
+	}
+	*/
+	
+	//로그인된 상태라면
+	if($("#identify").val() == "member"){
+		$("#filters").css("display", "block");		
+		//해시값이 있으면 페이지 이동
+		if(document.location.hash){
+			var hash = window.location.hash.replace("#", "");
+			var target = $("#"+hash);
+			var page = Math.floor(hash/20)+1;
+			window.location.hash = page;
+		
+			$("#pagenum").val(page);
+			
 			for(var i=1; i<=page; i++){
 				fn_selectBoardList(i);
 			}
-			
+		
 			location.hash = "#page"+page;
+		//아니면 첫 페이지 불러오기
+		}else{
+			fn_selectBoardList(1);
+		}
 	}else{
-		fn_selectBoardList(1);
+		$("html, body").css("height", "100%");
+		$("#wellcome").css("display", "block");
 	}
 	
 });	
@@ -138,20 +187,25 @@ function fn_selectBoardList(pageNo){
     comAjax.addParam("pagenum",pageNo);
     comAjax.addParam("page_row",9);
     comAjax.ajax();
-	window.alert("추가");
 }
  
 function Callback(data){
 	var id = data.userInfo.member_id;
     var total = data.total;
-    var addpoint = $("#addlist");
+    var totalpnum = Math.ceil(total/9);
+    var addpoint = $("#diary-wrapper");
     var last = $("#addlist");
    //	body.empty();
+   
+   //총 페이지 갯수 저장
+   $("#totalpnum").val(totalpnum);
+  
     if(total == 0){
         var str = "<center>작성된 다이어리가 없습니다.</center>";
         body.append(str);
     }
     else{
+    	
         var params = {
             divId : "pagenav",
             pageIndex : "pagenum",
@@ -164,7 +218,7 @@ function Callback(data){
         var str = "";
         var pageNo = $("#pagenum").val();
         var i=1;
-        var num = pageNo*20-20 ;
+        var num = pageNo*9-9 ;
         var pro = 0;
     	var basicClass = "span4 diary-item html5 css3 responsive ";
     	var className = null;
@@ -194,10 +248,9 @@ function Callback(data){
     		}
         	
         //	var dtm = GetDateString(value.CREA_DTM);
-            str += "<div id='page"+pageNo+"'>"+
-            		"<div id='diary' class='"+className+"'>"+
-            		"<div class='picture' id='d"+ (num + i)+"'>"+
-            			"<a href='diarydays.jsp?dvol="+value.diary_volum+"&mnum="+value.member_num+"' title='Title'>"+
+            str += "<div id='diary' class='"+className+"'>"+
+            		"<div class='picture'id='"+ (num + i)+"'>"+
+            		"<a href='diarydays.jsp?dvol="+value.diary_volum+"&mnum="+value.member_num+"' title='Title'>"+
                         "<img src='${pageContext.request.contextPath}/upload/"+ value.diary_cover +"' alt='' class='dcover'/>" + 
                         "<div class='image-overlay-link'></div></a>"+
                         	"<div class='item-description alt'>" +
@@ -207,19 +260,41 @@ function Callback(data){
                         	"</div>" +
                         "</div>"+
                     "</div>"+
-                    "</div>"+
                     "</div>";
                     i++;
         });
-        var anchor = "<div id='page"+pageNo+"'>";
-        addpoint.append(anchor+str+"</div>");
+        var anchor = "<a id='page"+pageNo+"'>";
+        //addpoint.append(anchor+str);
+      
+  		addpoint.isotope().append(str);
+  		addpoint.isotope('appended', str);
+        // isotope();
+        
       //  addpoint.append(str);
       //  addpoint.append("</div>");
-        
         //db limit걸기, 날짜표시 수정, num > id 변경 출력
     }
+    
 }
 
+/*
+function getItemElement(item) {
+	  var $item = item;
+
+	  var test = 'isotope-item';
+	  $item.addClass(test);
+	  return $item;
+	}
+
+function addtest(){
+	var $container = $('#diary-wrapper').isotope({
+		  itemSelector: '.diary-item',
+		});
+	
+	$items = getItemElement().add( getItemElement() ).add( getItemElement() ).add( getItemElement() ).add( getItemElement() ).add( getItemElement() ).add( getItemElement() ).add( getItemElement() ).add( getItemElement() );
+	$container.append( $items ).isotope( 'appended', $items );
+}
+*/
 //날짜 형식 변환
 function getDateString(jsonDate){
 	var year, month, day, hour, minute, second , returnValue  , date ,replaceStr

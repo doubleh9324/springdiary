@@ -35,6 +35,17 @@ public class tdDAO extends AbstractDAO{
 	@SuppressWarnings("unchecked")
 	public List<DiaryDTO> selectmDiaryList(Map<String, Object> map) throws Exception{
 		
+		int pnum = (Integer)map.get("pnum");
+		
+		
+		if(pnum>0)
+			map.put("pnum", (pnum-1)*9);
+		else
+			map.put("pnum",0);
+		
+		map.put("cnum", 9);
+		
+		
 		List<DiaryDTO> result = (List<DiaryDTO>)selectList("td.selectmDiaryList", map);
 		return result;
 	}

@@ -80,13 +80,13 @@ public class TdController {
 		//정보가 빈 상태라면
 		if(status.equals("logout")){
 			//손님 계정이니 다이어리 목록은 없닷
-			mv.addObject("diaryflag", "guest");
+			mv.addObject("identify", "guest");
 		} else {
 			userInfo = (MemberDTO) session.getAttribute("userInfo");
 			
 			//로그인된 상태, 개인 일기장 목록 가져오기
 		//	mdiary = tdService.getmDiaryList(Integer.parseInt(userNum));
-			mv.addObject("diaryflag", "member");
+			mv.addObject("identify", "member");
 		}
 		
 		mv.addObject("userInfo", userInfo);
@@ -98,8 +98,10 @@ public class TdController {
 	
 	//common으로 옮겨야 할 것 같은뎅
 	@RequestMapping(value="/td/login.do")
-	public ModelAndView openLoginPage() throws Exception{
+	public ModelAndView openLoginPage(HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView("/td/login");
+		
+
 		return mv;
 	}
 	
@@ -132,13 +134,16 @@ public class TdController {
 	//세션을 아예 삭제하지말고 userNum값을 0으로 바꾸기 이렇게 써도 되는건가 나중에 찾아볼것
 	@RequestMapping(value="/td/logout.do")
 	public ModelAndView doLogout(HttpServletRequest request) throws Exception{
-		ModelAndView mv = new ModelAndView("redirect:/td/main.do");
+		ModelAndView mv = new ModelAndView("/td/main");
 		
 		HttpSession session = request.getSession(false);
 		MemberDTO userInfo = null;
 		
 		session.setAttribute("userInfo", userInfo);
+		session.setAttribute("status", "logout");
 		//tdService.doLogout(userNum);
+		
+		mv.addObject("identify", "guest");
 		
 		return mv;
 	}
@@ -149,12 +154,12 @@ public class TdController {
 		ModelAndView mv = new ModelAndView("/td/mydiary");
 		
 		HttpSession session = request.getSession(false);
-		String status = session.getAttribute("status").toString();
+		String status = (String) session.getAttribute("status");
 		
 		if(status.equals("logout")){
-			mv.addObject("diaryflag", "guest");
+			mv.addObject("identify", "guest");
 		} else {
-			mv.addObject("diaryflag", "member");
+			mv.addObject("identify", "member");
 		}
 		
 		return mv;

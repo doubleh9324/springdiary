@@ -34,11 +34,12 @@ overflow: visible;
 <script type="text/javascript">
 $(document).ready(function(){
 	
-	if($('#userId').val() == "guest")
-	  $('.navbar-right li:eq(0)').hide();
+	if($('#identify').val() == "member"){
+	  $('.navbar-right li:eq(0)').show();
+	 }
 	else{
-		$('.navbar-right li:eq(1)').hide();
-		$('.navbar-right li:eq(2)').hide();
+		$('.navbar-right li:eq(1)').show();
+		$('.navbar-right li:eq(2)').show();
 	}
 	});
 	
@@ -74,18 +75,14 @@ $(document).ready(function(){
 	                        <a class="page-scroll" href="/TravelDiary/td/mypage.do">MY PAGE</a>
 	                    </li>
 	                </ul>
-	            </div>
-	            
-	            <div class="collapse navbar-collapse sUser" 
-	            style="float:right; margin-top:10px">
 	                <ul class="nav navbar-nav navbar-right">
-	               		<li>
+	               		<li  style="display:none;">
 	                    	<a href="/TravelDiary/td/logout.do">LOG OUT</a>
 	                    </li>
-	                    <li>
+	                    <li  style="display:none;">
 	                    	<a href="/TravelDiary/td/login.do">LOG IN</a>
 	                    </li>
-	                    <li>
+	                    <li  style="display:none;">
 	                    	<a onclick="/TravelDiary/td/join.do">JOIN</a>
 	                    </li>
 	                </ul>

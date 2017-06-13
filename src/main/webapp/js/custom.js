@@ -347,7 +347,12 @@ jQuery(document).ready(function () {
 
 /* -------------------- Isotope --------------------- */
 
+
 jQuery(document).ready(function () {
+	
+
+	
+
 	//모든 이미지가 로드되면 실행 할 함수
 	$('#diary-wrapper').imagesLoaded(function() {
 		
@@ -375,6 +380,7 @@ jQuery(document).ready(function () {
 		$container.isotope({
 			itemSelector : '.diary-item'
 		});
+		
 
 		$select.change(function() {
 			
@@ -420,6 +426,8 @@ jQuery(document).ready(function () {
 		  });
 		
 	});
+	
+	
 	
 });
 

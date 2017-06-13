@@ -43,7 +43,7 @@
 				DIARY
 			WHERE
 				MEMBER_NUM = #{mnum} AND DEL_FLAG = 'n'
-			LIMIT #{pnum}, 9
+			LIMIT #{pnum}, #{cnum}
 		]]>		
 	</select>	
 	
