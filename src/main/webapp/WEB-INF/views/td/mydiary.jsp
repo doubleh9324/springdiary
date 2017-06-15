@@ -37,7 +37,7 @@
 		<center>
 		I'm a ${identify}
 		<input type="hidden" id="identify" name="identify" value="${identify}"><br>
-		
+		<!-- 다이어리 구경 페이지는 아직 안됐어 -->
 		<div id="wellcome" style="display:none;">
 		Travel Diary에서 새로운 여행 일기를 남겨봐 :D<br><br>
 		<button class="button btn-warning" onclick="window.location='/TravelDiary/td/diarylist.do'">
@@ -51,24 +51,18 @@
 				
 		<!-- start : filter-->
 		
-		<div id="filters" style="display:none;">
+		<div id="filters" class="filter-button" style="display:none;">
 		<center>
-			<ul class="option-set" data-option-key="filter">
-				<li><a href="#filter" class="selected" data-option-value="*">All</a></li>
-				<li>/</li>
-				<li><a href="#filter" data-option-value=".internal">국내</a></li>
-				<li>/</li>
-				<li><a href="#filter" data-option-value=".foreign">해외</a></li>
-				<li>/</li>
-				<li><a href="#filter" data-option-value=".full">완성</a></li>
-			</ul>
+			<button class="btncol button is-checked " data-filter="*">all</button>
+			/<button class="button btncol" data-filter=".full">완성</button>
+			/<button class="button btncol" data-filter=".foreign">해외</button>
+			/<button class="button btncol" data-filter=".internal">국내</button>
 		</center>
 		</div>
 		<!-- end : filter -->
 		
 		<!-- start : diary list -->
-		<div id="diary-wrapper" class="row-fluid" style="oveflow:visible; position: relative; height: 4410px;">
-				<div id="addlist"></div>
+		<div id="diary-wrapper" class="row-fluid" style="height: 4410px;">
 		</div>
 		<!-- end : diary list -->
 		
@@ -205,7 +199,10 @@ function Callback(data){
         body.append(str);
     }
     else{
-    	
+    	var path = "${pageContext.request.contextPath}/upload/";
+    	callbackMydiary(data, path);
+    }
+    	/*
         var params = {
             divId : "pagenav",
             pageIndex : "pagenum",
@@ -262,19 +259,20 @@ function Callback(data){
                     "</div>"+
                     "</div>";
                     i++;
+
         });
         var anchor = "<a id='page"+pageNo+"'>";
-        //addpoint.append(anchor+str);
-      
-  		addpoint.isotope().append(str);
-  		addpoint.isotope('appended', str);
+       // addpoint.append(anchor+str);
+      loadMorePosts(str);
+  		//addpoint.isotope().append(str);
+  		//addpoint.isotope('appended', str);
         // isotope();
         
       //  addpoint.append(str);
       //  addpoint.append("</div>");
         //db limit걸기, 날짜표시 수정, num > id 변경 출력
     }
-    
+    */
 }
 
 /*
@@ -296,6 +294,18 @@ function addtest(){
 }
 */
 //날짜 형식 변환
+/*
+var $container = $('#diary-wrapper');
+
+function loadMorePosts(additem) {
+	
+	$container.append(additem).imagesLoaded(function() {
+		$container.isotope( 'appended', additem );
+		  });
+};
+
+	*/
+	
 function getDateString(jsonDate){
 	var year, month, day, hour, minute, second , returnValue  , date ,replaceStr
 	 

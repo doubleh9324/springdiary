@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import traveldiary.common.dao.AbstractDAO;
+import traveldiary.td.dto.DayDTO;
 import traveldiary.td.dto.DayListViewDTO;
 import traveldiary.td.dto.DiaryDTO;
 import traveldiary.td.dto.MemberDTO;
@@ -45,9 +46,7 @@ public class tdDAO extends AbstractDAO{
 		
 		map.put("cnum", 9);
 		
-		
-		List<DiaryDTO> result = (List<DiaryDTO>)selectList("td.selectmDiaryList", map);
-		return result;
+		return (List<DiaryDTO>)selectList("td.selectmDiaryList", map);
 	}
 	
 	public MemberDTO doLogin(MemberDTO member) throws Exception{
@@ -71,6 +70,32 @@ public class tdDAO extends AbstractDAO{
 	public List<Map<String, Object>> getProgress(int mnum) throws Exception{
 		return selectList("td.selectmProgress", mnum);
 	}
+	
+	//특정 일기장을 가져올땐 매개변수로 map(mnum, dvol)받기
+	public double getProgress(Map<String, Object> map) throws Exception{
+		Double prog = 0.0;
+		try{
+			return (Double) selectOne("td.selectdProgress", map);
+		} catch (NullPointerException e){
+			return prog;
+		}
+//			throw new Exception("taDAO getProgress " + e.getMessage(), e);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<DayDTO> selectmDays(Map<String, Object> map){
+		return (List<DayDTO>) selectList("td.selectmDays", map);
+	}
 
-
+	public int selectddTotal(Map<String, Object> map){
+		return (Integer) selectOne("td.selectddCount", map);
+	}
+	
+	//특정 일기장의 일기 목록에 쓰일 댓글 수 리스트 반환 map(mnum, dvol) 매개변수로 받기
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> getdRecount(Map<String, Object> map) throws Exception{
+		return (List<Map<String, Object>>) selectList("td.selectdRecount", map);
+		
+	}
 }

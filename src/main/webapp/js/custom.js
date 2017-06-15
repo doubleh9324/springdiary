@@ -348,17 +348,84 @@ jQuery(document).ready(function () {
 /* -------------------- Isotope --------------------- */
 
 
-jQuery(document).ready(function () {
-	
+//external js: isotope.pkgd.js, imagesloaded.pkgd.js
 
+
+//init Isotope
+var $grid = $('#diary-wrapper').isotope({
+	itemSelector: '.diary-item',
+	masonry: {
+	}
+});
+
+//layout Isotope after each image loads
+$grid.imagesLoaded().progress( function() {
 	
+	$grid.isotope('layout');
+	
+});
+
+
+var $grid = $('#diary-wrapper').isotope({
+	  itemSelector: '.diary-item',
+	//  layoutMode: 'fitRows',
+	});
+
+
+	// bind filter button click
+	$('#filters').on( 'click', 'button', function() {
+		
+	  var filterValue = $( this ).attr('data-filter');
+	  // use filterFn if matches value
+	 // filterValue = filterFns[ filterValue ] || filterValue;
+	  $('#diary-wrapper').isotope({ filter: filterValue });
+	});
+
+
+	// change is-checked class on buttons
+	$('.filter-button').each( function( i, buttonGroup ) {
+	  var $buttonGroup = $( buttonGroup );
+	  $buttonGroup.on( 'click', 'button', function() {
+	    $buttonGroup.find('.is-checked').removeClass('is-checked');
+	    $( this ).addClass('is-checked');
+	  });
+	});
+	
+	
+	
+	
+	
+	
+//loads more posts
+function loadMorePosts(str) {
+	
+//	img = "<img src='"+path+"/upload/"+img+"' alt='' class='dcover'/>";
+//	window.alert(str);
+//	str = pre+img+post
+	//set.forEach(function(x) {
+//	 window.alert(x);
+	  $('#diary-wrapper').append(str).imagesLoaded(function() {
+	    $('#diary-wrapper').isotope( 'appended', str ).isotope('reloadItems').isotope({ filter: '*' });
+	  });
+//	startSet = endSet;
+//	endSet+=9;
+};
+
+
+
+
+
+
+
+/*
+//jQuery(document).ready(function () {
 
 	//모든 이미지가 로드되면 실행 할 함수
 	$('#diary-wrapper').imagesLoaded(function() {
-		
 		var $container = $('#diary-wrapper');
 			$select = $('#filters select');
 
+	
 		// initialize Isotope
 		$container.isotope({
 		// options...
@@ -367,23 +434,25 @@ jQuery(document).ready(function () {
 	  	masonry: { columnWidth: $container.width() / 12 }
 		});
 
+		
 		// update columnWidth on window resize
-		$(window).smartresize(function(){
+		$(window).resize(function(){
 		
 			$container.isotope({
 			// update columnWidth to a percentage of container width
 			masonry: { columnWidth: $container.width() / 12 }
 			});
 		});
-
+	
 
 		$container.isotope({
 			itemSelector : '.diary-item'
 		});
 		
+		
 
 		$select.change(function() {
-			
+			window.alert("???");
 			var filters = $(this).val();
 
 				$container.isotope({
@@ -402,6 +471,8 @@ jQuery(document).ready(function () {
 				if ( $this.hasClass('selected') ) {
 			  		return false;
 				}
+				
+				
 			var $optionSet = $this.parents('.option-set');
 			$optionSet.find('.selected').removeClass('selected');
 			$this.addClass('selected');
@@ -425,9 +496,136 @@ jQuery(document).ready(function () {
 			
 		  });
 		
-	});
+//	});
 	
 	
 	
 });
 
+
+/* -------------------- ajax scroll paging add item --------------------- */
+
+function callbackDiarydays(data, path){
+	
+	var id = data.userInfo.member_id;
+    var total = data.total;
+    var totalpnum = Math.ceil(total/20);
+    var addpoint = $("table>tbody");
+    var str = "";
+    
+	var params = {
+            divId : "pagenav",
+            pageIndex : "pagenum",
+            totalCount : data.total,
+            eventName : "selectdaylist"
+        };
+        gfn_renderPaging(params);
+         
+        //값을 가져와서 뿌려주는 부분
+        var pageNo = $("#pagenum").val();
+        var i=1;
+        var num = pageNo*20-20 ;
+        var reCount = 0;
+        var title="";
+        $.each(data.dayList, function(key, value){
+        	if(num < 0)
+        		num = 0;
+        	var day_time = getDateString(value.day_time);
+        	var time = getDateString(value.time);
+        	
+        	$.each(data.replyCount, function(key, reply){
+        		if(reply.day_num == value.day_num)
+        			reCount = reply.count;
+        		
+        	});
+        	
+        	if(reCount>0)
+        		title = value.day_title+"("+reCount+")";
+        	else
+        		title = value.day_title;
+        	
+        	str += "<tr id'"+(num+i)+"'>"+
+        			"<td>" + value.day_num + "</td>"+
+        			"<td class='title'>" +
+        				"<a href='#'"+(num+i)+"' name='title' onclick='openDayDetail("+value.day_num+","+(num+i)+")'>" 
+        				+ title+"</a></td>"+
+        			"<td>" + day_time + "</td>"+
+        			"<td>" + time + "</td>"+
+        			"<td>" + value.hits + "</td>";
+        	
+        });
+        var anchor = "<a id='page"+pageNo+"'>";
+        addpoint.append(str);
+}
+
+
+function callbackMydiary(data, path){
+	
+	var id = data.userInfo.member_id;
+    var total = data.total;
+    var totalpnum = Math.ceil(total/9);
+    var addpoint = $("#diary-wrapper");
+    
+	var params = {
+            divId : "pagenav",
+            pageIndex : "pagenum",
+            totalCount : data.total,
+            eventName : "fn_selectBoardList"
+        };
+        gfn_renderPaging(params);
+         
+        //값을 가져와서 뿌려주는 부분
+        var preimg = "";
+        var img="";
+        var postimg ="";
+        var pageNo = $("#pagenum").val();
+        var i=1;
+        var num = pageNo*9-9 ;
+        var pro = 0;
+    	var basicClass = "span4 diary-item html5 css3 responsive ";
+    	var className = null;
+        
+        
+        $.each(data.diaryList, function(key, value){
+        	if(num < 0)
+        		num = 0;
+        	var start = getDateString(value.start_day);
+        	var end = getDateString(value.end_day);
+        	
+        	$.each(data.progress, function(key, prog){
+        		if(prog.diary_volum == value.diary_volum)
+        			pro = prog.percent;
+        		
+        	});
+        	
+        	
+        	if(pro == 100)
+        		basicClass = basicClass+"full ";
+        	
+        	//지역에 따라 클래스 이름 추가
+    		if((value.location_code).indexOf('i')>-1){
+    			className = basicClass+"internal";
+    		} else if((value.location_code).indexOf("o")>-1){
+    			className = basicClass+"foreign";
+    		}
+        	
+        //	var dtm = GetDateString(value.CREA_DTM);
+            preimg = "<div id='diary' class='"+className+"'>"+
+            		"<div class='picture'id='"+ (num + i)+"'>"+
+            		"<a href='/TravelDiary/td/diarydays.do?dvol="+value.diary_volum+"&mnum="+value.member_num+"'>";
+            img=     "<img src='"+path+value.diary_cover+"' alt='' class='dcover'/>"; 
+            postimg=            "<div class='image-overlay-link'></div></a>"+
+                        	"<div class='item-description alt'>" +
+	                        	"<h5><a href='diarydays.jsp?dvol="+value.diary_volum+"'>"+value.diary_title +"</a></h5>"+
+	                        	"<p>"+start+"-"+end+"<br>"+
+	                        	"vol."+value.diary_volum+"</p>"+
+                        	"</div>" +
+                        "</div>"+
+                    "</div>"+
+                    "</div>";
+                    i++;
+                    loadMorePosts(preimg+img+postimg);
+        });
+        var anchor = "<a id='page"+pageNo+"'>";
+
+}

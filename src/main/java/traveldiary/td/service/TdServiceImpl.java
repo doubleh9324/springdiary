@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import traveldiary.common.common.CommandMap;
 import traveldiary.td.dao.tdDAO;
+import traveldiary.td.dto.DayDTO;
 import traveldiary.td.dto.DayListViewDTO;
 import traveldiary.td.dto.DiaryDTO;
 import traveldiary.td.dto.MemberDTO;
@@ -24,7 +25,7 @@ public class TdServiceImpl implements TdService {
 	
 	//전체 일기 항목 가져오기
 	@Override
-	public DayListViewDTO selectDayList() throws Exception {
+	public DayListViewDTO getDayList() throws Exception {
 		return null;
 	}
 
@@ -40,7 +41,6 @@ public class TdServiceImpl implements TdService {
 	}
 
 
-	@SuppressWarnings("null")
 	@Override
 	public Map<String, Object> getmDiaryList(Map<String, Object> map) throws Exception {
 		
@@ -85,7 +85,24 @@ public class TdServiceImpl implements TdService {
 		result.put("member", memberinfo);
 		return result;
 	}
-	
+
+
+	@Override
+	public Map<String, Object> getDiaryDays(Map<String, Object> map) throws Exception {
+			List<DayDTO> daylist = tdDao.selectmDays(map);
+			double prog = tdDao.getProgress(map);
+			List<Map<String, Object>> reCount = tdDao.getdRecount(map);
+			
+			Map<String, Object> resultmap = new HashMap<String, Object>();
+			resultmap.put("dayList", daylist);
+			resultmap.put("prog", prog);
+			resultmap.put("total",tdDao.selectddTotal(map));
+			resultmap.put("reCount", reCount);
+		return resultmap;
+	}
+
+
+
 //	public boolean doLogout() throws Exception{
 		
 //	}

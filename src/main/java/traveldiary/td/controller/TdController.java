@@ -205,6 +205,79 @@ public class TdController {
 		
 		return mv;
 	}
+	
+	@RequestMapping(value="/td/diarydays.do")
+	public ModelAndView opendiarydays(HttpServletRequest request ,
+										@RequestParam(value="mnum", required=true)int mnum,
+										@RequestParam(value="dvol", required=true)int dvol) throws Exception{
+		ModelAndView mv = new ModelAndView("/td/diarydays");
+		
+		HttpSession session = request.getSession(false);
+		String status = session.getAttribute("status").toString();
+		MemberDTO userInfo = null;
+		
+		request.setAttribute("mnum", mnum);
+		request.setAttribute("dvol", dvol);
+		
+		//로그인 상태 구분해서 열람 수정하기
+		if(status.equals("guest")){
+			mv.addObject("identify", "guest");
+		}else{
+			//멤버면 userinfo 가져오기
+			userInfo = (MemberDTO)session.getAttribute("userInfo");
+			
+			mv.addObject("identify", "member");
+		}
+		mv.addObject("userInfo",userInfo);
+		mv.addObject(mnum);
+		mv.addObject(dvol);
+		
+		return mv;
+	}
+	
+
+	@RequestMapping(value="/td/diarydaylist.do")
+	public ModelAndView selectdiarydaylist(HttpServletRequest request,
+											@RequestParam(value="mnum", required=true)int mnum,
+											@RequestParam(value="dvol", required=true)int dvol) throws Exception{
+		ModelAndView mv = new ModelAndView("jsonView");
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+		
+		//이걸 또 할 필요가 있나?
+		HttpSession session = request.getSession(false);
+		String status = (String) session.getAttribute("status");
+		
+		//로그인 된 경우와 그렇지 않은 경우 고려하기 나중에...
+	//	if(status.equals("logout")){
+			//손님 계정이니 다이어리 목록은 없닷
+	//	} else {
+			//로그인된 상태, 개인 일기장 목록 가져오기
+			MemberDTO userInfo = (MemberDTO) session.getAttribute("userInfo");
+			mv.addObject("userInfo", userInfo);
+			
+			//day dto
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("mnum", mnum);
+			map.put("dvol", dvol);
+			resultmap = (Map<String, Object>) tdService.getDiaryDays(map);
+			System.out.println(resultmap.get("prog"));
+			mv.addObject("dayList",resultmap.get("dayList"));
+			mv.addObject("progress", resultmap.get("prog"));
+			mv.addObject("total", resultmap.get("total"));
+			mv.addObject("replyCount", resultmap.get("reCount"));
+			
+	//	}
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/td/openDayDetail.do")
+	public ModelAndView openDayDetail (HttpServletRequest request) throws Exception{
+		ModelAndView mv = new ModelAndView("/td/daydetail");
+		
+		
+		return mv;
+	}
 }
 	
 	

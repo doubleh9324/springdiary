@@ -30,19 +30,19 @@
 			resultMap="diary">
 		<![CDATA[
 			SELECT
-				MEMBER_NUM,
-				DIARY_VOLUM,
-				DIARY_TITLE,
-				TIME,
-				START_DAY,
-				END_DAY,
-				LOCATION_CODE,
-				DIARY_COVER,
-				P_CODE
+				member_num,
+				diary_volum,
+				diary_title,
+				time,
+				start_day,
+				end_day,
+				location_code,
+				diary_cover,
+				p_code
 			FROM
 				DIARY
 			WHERE
-				MEMBER_NUM = #{mnum} AND DEL_FLAG = 'n'
+				member_num = #{mnum} AND del_flag = 'n'
 			LIMIT #{pnum}, #{cnum}
 		]]>		
 	</select>	
@@ -59,7 +59,20 @@
 				MEMBER_NUM = #{mnum} AND DEL_FLAG = 'n'
 		
 		]]>		
-			
+	</select>
+	
+	<select id="selectddCount"
+			parameterType="hashmap"
+			resultType="int">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				day
+			WHERE
+				member_num = #{mnum} and diary_volum = #{dvol}
+				and del_flag = 'n';		
+		]]>		
 	</select>
 	
 	<select id="selectProgress"
@@ -89,6 +102,53 @@
 		]]>
 	</select>
 	
+		
+	<select id="selectdProgress"
+			parameterType="hashmap"
+			resultType="double">
+		<![CDATA[
+			SELECT
+				percent
+			FROM
+				V_PROGRESS
+			WHERE
+				member_num = #{mnum} and diary_volum = #{dvol} 
+		]]>
+	</select>
+	
+	<select id="selectmDays"
+			parameterType="hashmap"
+			resultType="traveldiary.td.dto.DayDTO">
+	<![CDATA[
+			SELECT
+				*
+			FROM
+				DAY
+			WHERE
+				member_num=#{mnum} AND diary_volum=#{dvol}
+				and del_flag = 'n'
+	]]>		
+	</select>
+	
+	<select id="selectdRecount"
+			parameterType="hashmap"
+			resultType="hashmap">
+	<![CDATA[
+			SELECT
+				a.diary_volum,
+				b.day_num,
+				count(*) as count
+			FROM
+				day a join reply b
+			WHERE
+				a.member_num=#{mnum} AND a.diary_volum=#{dvol}
+				and a.day_num= b.day_num
+				and b.del_flag = 'n'
+				group by a.day_num
+	]]>		
+	</select>
+	
+	
 	<resultMap type="traveldiary.td.dto.DiaryDTO" id="diary">
 		<result property="member_num" column="MEMBER_NUM"/>
 		<result property="diary_volum" column="DIARY_VOLUM"/>
@@ -99,6 +159,18 @@
 		<result property="location_code" column="LOCATION_CODE"/>
 		<result property="diary_cover" column="DIARY_COVER"/>
 		<result property="p_code" column="P_CODE"/>
+	</resultMap>
+	
+	<resultMap type="traveldiary.td.dto.DayDTO" id="day">
+		<result property="member_num" column="member_num"/>
+		<result property="diary_volum" column="diary_volum"/>
+		<result property="member_num" column="member_num"/>
+		<result property="member_num" column="member_num"/>
+		<result property="member_num" column="member_num"/>
+		<result property="member_num" column="member_num"/>
+		<result property="member_num" column="member_num"/>
+		<result property="member_num" column="member_num"/>
+		<result property="member_num" column="member_num"/>
 	</resultMap>
 	
 	

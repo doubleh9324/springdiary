@@ -20,6 +20,22 @@
 
 /* Colors Section
 =================================================================== */
+.btncol{
+	background-color: white;
+	border: 1px white;
+}
+
+.btncol:hover{    
+	border-bottom: 1px solid yellowgreen;
+}
+
+.is-checked{
+	border-bottom: 1px solid yellowgreen;
+}
+
+
+
+
 .color.white {
 	background: #fff;
 	color: #414141;
@@ -954,7 +970,7 @@ html[xmlns] .slides {display: block;}
 input[type="button"] {
 	padding: 9px 12px;
 	display: inline-block;
-	border: 0px;
+/*	border: 0px; */
 	font-family: Arial, sans-serif;
 	font-weight: bold;
 	cursor: pointer;

@@ -12,7 +12,7 @@ import traveldiary.td.dto.testDTO;
 
 public interface TdService {
 	
-	DayListViewDTO selectDayList() throws Exception;
+	DayListViewDTO getDayList() throws Exception;
 //	List<MemberDTO> selectMemberList() throws Exception;
 	
 	testDTO testService() throws Exception;
@@ -20,4 +20,7 @@ public interface TdService {
 	Map<String, Object> getmDiaryList(Map<String, Object> map) throws Exception;
 
 	Map<String, Object> doLogin(MemberDTO member) throws Exception;
+	
+	Map<String, Object> getDiaryDays(Map<String, Object> map) throws Exception;
+	
 }
