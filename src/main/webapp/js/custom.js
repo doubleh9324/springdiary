@@ -507,7 +507,7 @@ function loadMorePosts(str) {
 
 function callbackDiarydays(data, path){
 	
-	var id = data.userInfo.member_id;
+	//var id = data.userInfo.member_id;
     var total = data.total;
     var totalpnum = Math.ceil(total/20);
     var addpoint = $("table>tbody");

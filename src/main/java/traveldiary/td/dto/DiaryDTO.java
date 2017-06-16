@@ -1,5 +1,6 @@
 package traveldiary.td.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DiaryDTO {
@@ -7,9 +8,9 @@ public class DiaryDTO {
 	private int member_num;
 	private int diary_volum;
 	private String diary_title;
-	private Date time;
-	private Date start_day;
-	private Date end_day;
+	private String time;
+	private String start_day;
+	private String end_day;
 	private String location_code;
 	private String diary_cover;
 	private String p_code;
@@ -42,26 +43,26 @@ public class DiaryDTO {
 	}
 	
 	public void setDate(Date time){
-		this.time = time;
+		this.time = setDateFormat(time);
 	}
 	
-	public Date getDate(){
+	public String getDate(){
 		return this.time;
 	}
 	
 	public void setStart_day(Date sday){
-		this.start_day = sday;
+		this.start_day = setDateFormat(sday);
 	}
 	
-	public Date getStart_day(){
+	public String getStart_day(){
 		return this.start_day;
 	}
 	
 	public void setEnd_day(Date eday){
-		this.end_day = eday;
+		this.end_day = setDateFormat(eday);
 	}
 	
-	public Date getEnd_day(){
+	public String getEnd_day(){
 		return this.end_day;
 	}
 	
@@ -88,11 +89,11 @@ public class DiaryDTO {
 	public String getP_code(){
 		return this.p_code;
 	}
-	public Date getTime() {
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(Date time) {
+	public void setTime(String time) {
 		this.time = time;
 	}
 
@@ -102,5 +103,10 @@ public class DiaryDTO {
 
 	public void setDel_flag(String del_flag) {
 		this.del_flag = del_flag;
+	}
+	
+	public String setDateFormat(Date d){
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+		return formatter.format(d);
 	}
 }

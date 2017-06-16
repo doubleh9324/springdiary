@@ -49,6 +49,12 @@ public class tdDAO extends AbstractDAO{
 		return (List<DiaryDTO>)selectList("td.selectmDiaryList", map);
 	}
 	
+	//일기쓰기 경우 select에 넣을 일기장 정보 가져오기
+	@SuppressWarnings("unchecked")
+	public List<DiaryDTO> selectmDiaryList(int mnum) throws Exception{
+		return (List<DiaryDTO>)selectList("td.selectinfoDiaryList", mnum);
+	}
+	
 	public MemberDTO doLogin(MemberDTO member) throws Exception{
 		String mid = member.getMember_id();
 		
@@ -97,5 +103,9 @@ public class tdDAO extends AbstractDAO{
 	public List<Map<String, Object>> getdRecount(Map<String, Object> map) throws Exception{
 		return (List<Map<String, Object>>) selectList("td.selectdRecount", map);
 		
+	}
+	
+	public DayDTO getDay(int dnum) throws Exception{
+		return (DayDTO) selectOne("td.selectDay", dnum);
 	}
 }

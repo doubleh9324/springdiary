@@ -47,7 +47,7 @@
 		       	<h3>Achievement</h3>
 		       	<ul class="progress-bar-stripes">
 		        	<li>
-		            	<div class="meter"><p>여행완성 % </p><span style="width: %"></span></div>
+		            	<div class="meter"><p></p><span style="width: %"></span></div>
 		          	</li>
 		      	</ul>
 		      	<!-- end: Skills -->
@@ -85,25 +85,25 @@
 		<input type="hidden" id="totalpnum" name="totalpnum" >
 
 		</div>
-	
-		<div class="btn-wrap" style="margin: 0 0 20px 0;">
-			<center>
-			<button class="button btn-warning" onclick="javascript:window.location='writeDay.jsp?dvol=${dvol}>'">
+		<center>
+		<div class="btn-wrap" style="margin: 0 0 20px 0; display:none;">
+			
+			<button class="button btn-warning" onclick="openWriteDay(${dvol})">
 			<span>일기쓰기</span></button>
-			<button class="button btn-warning" onclick="javascript:window.location='modifyDiary.jsp?dvol=${dvol}&userNum=${mnum}'">
+			<button class="button btn-warning" onclick="javascript:window.location='/td/modifyDiary.do?dvol=${dvol}&userNum=${mnum}'">
 			<span>일기장 수정</span></button>
 			<button class="button btn-warning" onclick="javascript:deleteDiary(${dvol}, ${mnum})">
 			<span>일기장 삭제</span></button>
 	
-			<center>
-			<button class="button btn-warning" onclick="javascript:window.location='diaryList.jsp'">
-			<span>일기장 목록</span></button>
-			<button class="button btn-warning" onclick="javascript:window.location='mydiary.jsp?mnum=${mnum}'">
+			<!-- 로그인된 상태라면 세션에서 정보를 가져와서 이동한 후 꺼내면 되는 일이니 굳이 userNum을 넘겨줄 필요는 없어보여 -->
+			<button class="button btn-warning" onclick="javascript:window.location='/TravelDiary/td/mydiary.do'">
 			<span>내 일기장 목록</span></button>
-			</center>
 			
-			</center>
+
 		</div>
+			<button class="button btn-warning" onclick="javascript:window.location='/td/diaryList.do'">
+			<span>일기장 목록</span></button>
+			</center>
 			</div></div>
 		</div>
 		<!-- end : Wrapper -->
@@ -175,9 +175,11 @@ $(document).ready(function(){
 	*/
 	$("html, body").css("height", "100%");
 	
-	//몰라
+	//해당하는 일기장이 로그인된  user의 일기장이면 표시할 버튼
 	if($("#identify").val() == "member"){
-		$("#filters").css("display", "block");		
+		
+		
+
 		//해시값이 있으면 페이지 이동
 		if(document.location.hash){
 			var hash = window.location.hash.replace("#", "");
@@ -214,6 +216,13 @@ function openDayDetail(dnum,num){
     comSubmit.submit();
 }
 
+function openWriteDay(dvol){
+	var comSubmit = new ComSubmit();
+    comSubmit.setUrl("<c:url value='/td/openWriteDay.do' />");
+    comSubmit.addParam("dvol", dvol);
+    comSubmit.submit();
+}
+
 
 </script>
 
@@ -221,7 +230,7 @@ function openDayDetail(dnum,num){
 
 
 //목록 추가 ajax
-function selectdaylist(pageNo,mnum,dvol){
+function selectdaylist(pageNo){
     var comAjax = new ComAjax();
     comAjax.setUrl("<c:url value='/td/diarydaylist.do?mnum=${mnum}&dvol=${dvol}' />");
     comAjax.setCallback("Callback");
@@ -231,23 +240,27 @@ function selectdaylist(pageNo,mnum,dvol){
 }
  
 function Callback(data){
-	var id = data.userInfo.member_id;
+//	var id = data.userInfo.member_id;
     var total = data.total;
     var totalpnum = Math.ceil(total/20);
     var addpoint = $("table>tbody");
     var last = $("#addlist");
-   //	body.empty();
    
-   //총 페이지 갯수 저장
-   $("#totalpnum").val(totalpnum);
-  
+	//총 페이지 갯수 저장
+	$("#totalpnum").val(totalpnum);
+	  
+	//해당 일기장과 회원 정보가 일치하면 수정, 삭제, 일기쓰기 등 버튼 표시
+	$(".btn-wrap").css("display", "block");
+	  
+	//프로그래스바로 값 넘겨주기
+	$('.meter > p ').html("여행일기"+data.progress+"%");
+	$('.meter > span').css("width", data.progress+"%");
+
     if(total == 0){
         var str = "<td colspan='5' style='text-align:center;'>작성된 일기가 없습니다.</td>";
         addpoint.append(str);
     }
     else{
-		//프로그래스바로 값 넘겨주기
-    	
     	var path = "${pageContext.request.contextPath}/upload/";
     	callbackDiarydays(data, path);
     }

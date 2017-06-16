@@ -59,6 +59,10 @@ public class TdServiceImpl implements TdService {
 		return resultmap;
 	}
 	
+	@Override
+	public List<DiaryDTO> getmDiaryList(int mnum) throws Exception {
+		return tdDao.selectmDiaryList(mnum);
+	}
 	
 	
 
@@ -100,6 +104,18 @@ public class TdServiceImpl implements TdService {
 			resultmap.put("reCount", reCount);
 		return resultmap;
 	}
+
+
+	@Override
+	public Map<String, Object> getDayDetail(int dnum) throws Exception {
+		
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+		resultmap.put("day",tdDao.getDay(dnum) );
+		return resultmap;
+	}
+
+
+
 
 
 

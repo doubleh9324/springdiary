@@ -4,6 +4,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <title>first</title>
  
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/isotope.js?ver=234523"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.imagesloaded.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>

@@ -45,7 +45,28 @@
 				member_num = #{mnum} AND del_flag = 'n'
 			LIMIT #{pnum}, #{cnum}
 		]]>		
-	</select>	
+	</select>
+	
+		<select id="selectinfoDiaryList"
+			parameterType="integer"
+			resultMap="diary">
+		<![CDATA[
+			SELECT
+				member_num,
+				diary_volum,
+				diary_title,
+				time,
+				start_day,
+				end_day,
+				location_code,
+				diary_cover,
+				p_code
+			FROM
+				DIARY
+			WHERE
+				member_num = #{mnum} AND del_flag = 'n'
+		]]>		
+	</select>
 	
 	<select id="selectmDiaryLCount"
 			parameterType="string"
@@ -145,6 +166,20 @@
 				and a.day_num= b.day_num
 				and b.del_flag = 'n'
 				group by a.day_num
+	]]>		
+	</select>
+	
+	<select id="selectDay"
+			parameterType="integer"
+			resultType="traveldiary.td.dto.DayDTO">
+	<![CDATA[
+			SELECT
+				*
+			FROM
+				day
+			WHERE
+				day_num = #{dnum} and
+				del_flag = 'n'
 	]]>		
 	</select>
 	
