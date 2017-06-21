@@ -530,8 +530,8 @@ function callbackDiarydays(data, path){
         $.each(data.dayList, function(key, value){
         	if(num < 0)
         		num = 0;
-        	var day_time = getDateString(value.day_time);
-        	var time = getDateString(value.time);
+       // 	var day_time = getDateString(value.day_time);
+       // 	var time = getDateString(value.time);
         	
         	$.each(data.replyCount, function(key, reply){
         		if(reply.day_num == value.day_num)
@@ -549,8 +549,8 @@ function callbackDiarydays(data, path){
         			"<td class='title'>" +
         				"<a href='#'"+(num+i)+"' name='title' onclick='openDayDetail("+value.day_num+","+(num+i)+")'>" 
         				+ title+"</a></td>"+
-        			"<td>" + day_time + "</td>"+
-        			"<td>" + time + "</td>"+
+        			"<td>" + value.day_time + "</td>"+
+        			"<td>" + value.time + "</td>"+
         			"<td>" + value.hits + "</td>";
         	
         });
@@ -589,8 +589,8 @@ function callbackMydiary(data, path){
         $.each(data.diaryList, function(key, value){
         	if(num < 0)
         		num = 0;
-        	var start = getDateString(value.start_day);
-        	var end = getDateString(value.end_day);
+        //	var start = getDateString(value.start_day);
+        //	var end = getDateString(value.end_day);
         	
         	$.each(data.progress, function(key, prog){
         		if(prog.diary_volum == value.diary_volum)
@@ -617,7 +617,7 @@ function callbackMydiary(data, path){
             postimg=            "<div class='image-overlay-link'></div></a>"+
                         	"<div class='item-description alt'>" +
 	                        	"<h5><a href='diarydays.jsp?dvol="+value.diary_volum+"'>"+value.diary_title +"</a></h5>"+
-	                        	"<p>"+start+"-"+end+"<br>"+
+	                        	"<p>"+value.start_day+"-"+value.end_day+"<br>"+
 	                        	"vol."+value.diary_volum+"</p>"+
                         	"</div>" +
                         "</div>"+

@@ -36,8 +36,8 @@ public class tdDAO extends AbstractDAO{
 	@SuppressWarnings("unchecked")
 	public List<DiaryDTO> selectmDiaryList(Map<String, Object> map) throws Exception{
 		
-		int pnum = (Integer)map.get("pnum");
-		
+		int pnum = Integer.parseInt((String)map.get("pnum"));
+	//	int pnum = (Integer) map.get("pnum");
 		
 		if(pnum>0)
 			map.put("pnum", (pnum-1)*9);
@@ -107,5 +107,23 @@ public class tdDAO extends AbstractDAO{
 	
 	public DayDTO getDay(int dnum) throws Exception{
 		return (DayDTO) selectOne("td.selectDay", dnum);
+	}
+	
+	public boolean insertDay(DayDTO day) throws Exception{
+
+			int re = (Integer) insert("td.insertDay", day);
+			
+			if(re>0)
+				return true;
+			else
+				return false;
+	}
+	
+	public int selectindnum(DayDTO day) throws Exception{
+		return (Integer) selectOne("td.selectindnum", day);
+	}
+	
+	public void plusHits(int dnum) throws Exception{
+		update("td.plusHits", dnum);
 	}
 }

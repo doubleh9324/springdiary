@@ -183,6 +183,43 @@
 	]]>		
 	</select>
 	
+	<select id="selectindnum"
+			parameterType="traveldiary.td.dto.DayDTO"
+			resultType="integer">
+	<![CDATA[
+			SELECT
+				max(day_num)
+			FROM
+				day
+			WHERE
+				member_num = #{member_num} 
+				and diary_volum= #{diary_volum}
+				and del_flag = 'n'
+	]]>		
+	</select>
+	
+	<insert id="insertDay"
+			parameterType="traveldiary.td.dto.DayDTO">
+	<![CDATA[
+			insert into
+				day
+				(member_num, diary_volum, day_title, day, day_time, p_code)
+				value(#{member_num}, #{diary_volum}, #{day_title}, #{day}, #{day_time}, #{p_code})
+	]]>		
+	</insert>
+	
+	<update id="plusHits"
+			parameterType="integer">
+	<![CDATA[
+			update
+				day
+				set hits = hits+1
+			where
+				day_num = #{dnum} 
+				and del_flag = 'n'
+	]]>		
+	</update>
+	
 	
 	<resultMap type="traveldiary.td.dto.DiaryDTO" id="diary">
 		<result property="member_num" column="MEMBER_NUM"/>

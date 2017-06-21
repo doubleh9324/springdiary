@@ -266,6 +266,7 @@ function Callback(data){
     }
 }
 
+/*
 function getDateString(jsonDate){
 	var year, month, day, hour, minute, second , returnValue  , date ,replaceStr
 	 
@@ -287,7 +288,7 @@ function Pad(num) {
     //slice(start, end) start<0ÀÌ¸י length+start
     return num.slice(-2);
 }
-
+*/
 </script>
 </body>
 </html>

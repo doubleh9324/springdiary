@@ -163,12 +163,13 @@ public class TdController {
 			mv.addObject("identify", "member");
 		}
 		
+		
 		return mv;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/td/mydiaryList.do")
-	public ModelAndView selectMydiary(HttpServletRequest request) throws Exception{
+	public ModelAndView selectMydiary(HttpServletRequest request, CommandMap commandMap) throws Exception{
 		ModelAndView mv = new ModelAndView("jsonView");
 		List<DiaryDTO> mdiary = null;
 		Map<String, Object> resultmap = new HashMap<String, Object>();
@@ -178,8 +179,6 @@ public class TdController {
 		HttpSession session = request.getSession(false);
 		String status = (String) session.getAttribute("status");
 		
-		int pagenum = Integer.parseInt(request.getParameter("pagenum"));
-		
 		//로그인 된 경우와 그렇지 않은 경우 고려하기 나중에...
 		if(status.equals("logout")){
 			//손님 계정이니 다이어리 목록은 없닷
@@ -187,11 +186,10 @@ public class TdController {
 			//로그인된 상태, 개인 일기장 목록 가져오기
 			MemberDTO userInfo = (MemberDTO) session.getAttribute("userInfo");
 			mv.addObject("userInfo", userInfo);
-			
 			//diary dto
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("mnum", userInfo.getMember_num());
-			map.put("pnum", pagenum);
+			map.put("pnum", commandMap.getMap().get("pagenum"));
 			resultmap = (Map<String, Object>) tdService.getmDiaryList(map);
 			mdiary = (List<DiaryDTO>) resultmap.get("diaryList");
 
@@ -199,6 +197,7 @@ public class TdController {
 			total = (Integer) resultmap.get("total");
 		}
 		
+				
 		mv.addObject("total", total);
 		mv.addObject("progress", (List<Map<String, Object>>) resultmap.get("prog"));
 		mv.addObject("diaryList", mdiary);
@@ -261,6 +260,7 @@ public class TdController {
 			map.put("dvol", Integer.parseInt(request.getParameter("dvol")));
 			resultmap = (Map<String, Object>) tdService.getDiaryDays(map);
 			
+
 			mv.addObject("dayList",resultmap.get("dayList"));
 			mv.addObject("progress", resultmap.get("prog"));
 			mv.addObject("total", resultmap.get("total"));
@@ -286,7 +286,7 @@ public class TdController {
 			mv.addObject("userInfo", userInfo);
 		}
 		
-		DayDTO day = (DayDTO) tdService.getDayDetail(dnum).get("day");
+		DayDTO day = (DayDTO) tdService.getDayDetail(dnum, userInfo.getMember_num()).get("day");
 		mv.addObject("day", day);
 		
 		return mv;
@@ -314,8 +314,30 @@ public class TdController {
 		return mv;
 	}
 	
+	//시간 경과에 의핸 세션 해제는 나중에 수정하기
 	@RequestMapping(value="/td/writeDay.do")
-	public ModelAndView writeDay()
+	public ModelAndView writeDay(HttpServletRequest request, DayDTO day){
+		ModelAndView mv = new ModelAndView("/td/daydetail");
+		
+		HttpSession session = request.getSession(false);
+		String status = (String) session.getAttribute("status");
+		
+		MemberDTO userInfo = (MemberDTO) session.getAttribute("userInfo");
+		
+		try {
+			int dnum = tdService.writeDay(day);
+			
+			//insert가 성공하면 내용 불러와서 상세화면으로 보내기
+			if(dnum>0)
+				mv.addObject("day", (DayDTO)tdService.getDayDetail(dnum, userInfo.getMember_num()).get("day"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		mv.addObject("failFlag", "fail");
+		
+		return mv;
+	}
 }
 	
 	

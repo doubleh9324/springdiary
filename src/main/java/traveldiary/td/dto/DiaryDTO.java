@@ -106,7 +106,7 @@ public class DiaryDTO {
 	}
 	
 	public String setDateFormat(Date d){
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 		return formatter.format(d);
 	}
 }

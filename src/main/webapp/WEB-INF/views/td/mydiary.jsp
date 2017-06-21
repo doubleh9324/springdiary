@@ -179,7 +179,6 @@ function fn_selectBoardList(pageNo){
     comAjax.setUrl("<c:url value='/td/mydiaryList.do' />");
     comAjax.setCallback("Callback");
     comAjax.addParam("pagenum",pageNo);
-    comAjax.addParam("page_row",9);
     comAjax.ajax();
 }
  
@@ -306,19 +305,21 @@ function loadMorePosts(additem) {
 
 	*/
 	
+	/*
 function getDateString(jsonDate){
 	var year, month, day, hour, minute, second , returnValue  , date ,replaceStr
 	 
     date = new Date(jsonDate);
-
     year = date.getFullYear();
     month = Pad(date.getMonth());
     day = Pad(date.getDate());
-    hour = Pad(date.getHours());
-    minute = Pad(date.getMinutes());
-    second = Pad(date.getSeconds());
+   // hour = Pad(date.getHours());
+  //  minute = Pad(date.getMinutes());
+  //  second = Pad(date.getSeconds());
 
     returnValue = year + "/" + month + "/" + day;
+
+ //   window.alert(returnValue);
     return returnValue;
 }
 
@@ -327,7 +328,7 @@ function Pad(num) {
     //slice(start, end) start<0ÀÌ¸י length+start
     return num.slice(-2);
 }
-
+*/
 </script>
 
 </body>

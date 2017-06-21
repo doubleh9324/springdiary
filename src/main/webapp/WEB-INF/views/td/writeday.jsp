@@ -38,8 +38,9 @@
 		</div>
 <div class="container write-wrap" style="border:none;">
 
-<form id="writeday" name="writeday" method = "post" onsubmit="return checkF();" enctype="multipart/form-data" autocomplete="off">
+<form action="/TravelDiary/td/writeDay.do" id="writeday" name="writeday" method = "post" onsubmit="return checkF();" autocomplete="off">
 	
+	<input type="hidden" id="mnum" name="member_num" value="${userInfo.member_num }">
 	
 	<table class="write" style="width:100%;">
 	<tr>
@@ -49,7 +50,7 @@
 				<input id="ndvol" type="hidden">
 					<!-- 일기장 목록 넣기 -->		
 					
-                		<select id="seldiary" name="dvol" onchange="javascript:setday();" style="width:90%;">
+                		<select id="seldiary" name="diary_volum" onchange="javascript:setday();" style="width:90%;">
 						<option value=0>선택</option>
 	                    	<c:forEach var="value" items="${diaryList}">
                         <option value="${value.diary_volum }">${value.diary_title }</option>
@@ -60,8 +61,8 @@
 				<c:forEach var="value" items="${diaryList }">
 					<c:if test="${dvol == value.diary_volum }">
 						<input id="pcode" type="hidden" value="${value.p_code }">
-						<input id="sday" type="hidden" value="${value.start_day }">
-						<input id="eday" type="hidden" value="${value.end_day }">
+						<input id="start_day" type="hidden" value="${value.start_day }">
+						<input id="end_day" type="hidden" value="${value.end_day }">
 					</c:if>
 				</c:forEach>
 				<input type="text" value="날짜" name="day_time" id="day_time" 
@@ -79,20 +80,18 @@
 		<th>Privacy</th>
 			<td>
 			<label for="privacy_0">
-			<input type="radio" id="privacy_0" name="privacy" value="0" checked="checked">
+			<input type="radio" id="privacy_0" name="p_code" value="0" checked="checked">
 			Anyone</label>
 			</td>
 			<td>
 			<label for="privacy_1">
-			<input type="radio" id="privacy_1" name="privacy" value="1">
+			<input type="radio" id="privacy_1" name="p_code" value="1">
 			Member</label>
 			</td>
 			<td>
 			<label for="privacy_2">
-			<input type="radio" id="privacy_2" name="privacy" value="2">
+			<input type="radio" id="privacy_2" name="p_code" value="2">
 			Owner</label>
-			
-			<input type="radio" path="p_code" value="0" label="Anyone"/>
 			</td>
 	</tr>
 	<tr>
@@ -102,7 +101,7 @@
 	</tr>
 </table>
 
-<center><button class="button btn-warning" type="submit" >NEW</button></center>
+<center><button class="button btn-warning">NEW</button></center>
 
 </form>
 </div>
@@ -128,19 +127,19 @@ $(document).ready(function(){
     $("#seldiary").val(dvol).prop("selected", true);
     
     $("#day_time").datepicker({
-    	dateFormat: 'dd/mm/yy',
+    	dateFormat: 'yy/mm/dd',
     	//input sday에 저장된 값으로 최소 ,최대 날짜 지정
     	minDate : mindate(),
     	maxDate : maxdate()
     });
 
 	function mindate(){
-		var sday = document.getElementById("sday").value;
+		var sday = document.getElementById("start_day").value;
 		return sday;
 	}
 	
 	function maxdate(){
-		var eday = document.getElementById("eday").value;
+		var eday = document.getElementById("end_day").value;
 		return eday;
 	}
 	
@@ -151,15 +150,15 @@ $(document).ready(function(){
    // $("input:radio[name='privacy']:radio[value=+p_diary+]").attr("checked", true);
 	//초기화
 	if(p_diary == 0){
-		$("input:radio[name='privacy']:radio[value=0]").attr("checked", true);
+		$("input:radio[name='p_code']:radio[value=0]").attr("checked", true);
 	} else if(p_diary == 1){
-		$("input:radio[name='privacy']:radio[value=1]").attr("checked", true);
+		$("input:radio[name='p_code']:radio[value=1]").attr("checked", true);
 	} else if(p_diary == 2){
-		$("input:radio[name='privacy']:radio[value=2]").attr("checked", true);
+		$("input:radio[name='p_code']:radio[value=2]").attr("checked", true);
 	}
 	
 	//radio change
-	$("input:radio[name='privacy']").click(function(){
+	$("input:radio[name='p_code']").click(function(){
 		var rval = $(this).val();
 		
 		//2: 멤버, 게스트에게 아예표시하지 않음
@@ -168,7 +167,7 @@ $(document).ready(function(){
 		//일기장이 보안단계가 더 낮으면 (개인 - 멤버, 전체 : 허용안함),(멤버 - 전체 : )
 		if(p_diary=="2" && (rval=="1"||rval=="0")){
 			window.alert("일기장은 숨겨놓고 왜 보여조 앙대");
-			$("input:radio[name='privacy']:radio[value=2]").attr("checked", true);
+			$("input:radio[name='p_code']:radio[value=2]").attr("checked", true);
 		} else if(p_diary==1 && rval=="0"){
 			window.alert("일기장은 멤버공개야");
 		}
@@ -188,8 +187,8 @@ function pickdate(obj){
 	
 function checkF(){
 	var title = document.getElementById("title").value;
-	var day = document.getElementById("eday").value
-	var date = document.getElementById("day_time").value
+	var day = document.getElementById("end_day").value;
+	var date = document.getElementById("day_time").value;
 	
 	if(title == ""){
 		window.alert('제목을 입력해주세요');
@@ -210,7 +209,7 @@ function checkF(){
 function setday() {
 
 	//select된 dvol 찾아와서 day구간 재설정
-	var dvol = $("dvol").val();
+	var dvol = $("diary_volum").val();
 	var ndvol = $("#seldiary option:selected").val();
 	
 	var re = window.confirm("입력한 내용이 지워질거야 그래도 바꿀꼬야?");

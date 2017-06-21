@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import traveldiary.common.common.CommandMap;
+import traveldiary.td.dto.DayDTO;
 import traveldiary.td.dto.DayListViewDTO;
 import traveldiary.td.dto.DiaryDTO;
 import traveldiary.td.dto.MemberDTO;
@@ -24,5 +25,7 @@ public interface TdService {
 	
 	Map<String, Object> getDiaryDays(Map<String, Object> map) throws Exception;
 	
-	Map<String, Object> getDayDetail(int dnum) throws Exception;
+	Map<String, Object> getDayDetail(int dnum, int unum) throws Exception;
+	
+	int writeDay(DayDTO day) throws Exception;
 }

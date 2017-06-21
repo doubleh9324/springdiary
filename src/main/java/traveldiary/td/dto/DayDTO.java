@@ -1,5 +1,6 @@
 package traveldiary.td.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DayDTO {
@@ -9,9 +10,9 @@ public class DayDTO {
 	private String day_title;
 	private String day;
 	private int scrap_count;
-	private Date time;
+	private String time;
 	private int hits;
-	private Date day_time;
+	private String day_time;
 	private String p_code;
 	private String del_flag;
 	
@@ -25,9 +26,9 @@ public class DayDTO {
 		this.day_title = title;
 		this.day = contents;
 		this.scrap_count = scnt;
-		this.time = time;
+	//	this.time = time;
 		this.hits = hits;
-		this.day_time = dtime;
+	//	this.day_time = dtime;
 		this.p_code = pcode;
 		this.del_flag = del_flag;
 	}
@@ -90,20 +91,20 @@ public class DayDTO {
 
 	//글 작성한 시간
 	public void setTime(Date time){
-		this.time = time;
+		this.time = setDateFormat(time);
 		
 	}
 	
-	public Date getTime(){
+	public String getTime(){
 		return this.time;
 	}
 	
 	//여행 날짜
 	public void setDay_time(Date dtime){
-		this.day_time = dtime;
+		this.day_time = setDateFormat(dtime);
 	}
 	
-	public Date getDay_time(){
+	public String getDay_time(){
 		return this.day_time;
 	}
 	
@@ -132,5 +133,8 @@ public class DayDTO {
 		this.del_flag = del_flag;
 	}
 	
-	
+	public String setDateFormat(Date d){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+		return formatter.format(d);
+	}
 }

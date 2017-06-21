@@ -107,11 +107,35 @@ public class TdServiceImpl implements TdService {
 
 
 	@Override
-	public Map<String, Object> getDayDetail(int dnum) throws Exception {
+	public Map<String, Object> getDayDetail(int dnum, int unum) throws Exception {
 		
 		Map<String, Object> resultmap = new HashMap<String, Object>();
-		resultmap.put("day",tdDao.getDay(dnum) );
+		
+		
+		DayDTO day = tdDao.getDay(dnum);
+		
+		if(day.getMember_num() != unum){
+			tdDao.plusHits(dnum);
+		}
+		
+		
+		resultmap.put("day",day);
+		
+		
 		return resultmap;
+	}
+
+
+	@Override
+	public int writeDay(DayDTO day) throws Exception {
+		boolean re = tdDao.insertDay(day);
+		int dnum = 0;
+		if(re){
+			dnum = tdDao.selectindnum(day);
+		}
+			
+		
+		return dnum;
 	}
 
 
