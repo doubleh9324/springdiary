@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>My diary</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Travel Diary</title>
 </head>
 <body>
 <%@include file="/WEB-INF/include/include-header.jspf" %>
@@ -27,7 +27,7 @@
 
 			<div id="page-title-inner">
 
-				<h2><span>My Diary</span></h2>
+				<h2><span>Travel diary</span></h2>
 
 			</div>	
 
@@ -37,16 +37,20 @@
 		<center>
 		I'm a ${identify}
 		<input type="hidden" id="identify" name="identify" value="${identify}"><br>
-		<!-- ´ÙÀÌ¾î¸® ±¸°æ ÆäÀÌÁö´Â ¾ÆÁ÷ ¾ÈµÆ¾î -->
+		
+		
+		<!-- ë‹¤ì´ì–´ë¦¬ êµ¬ê²½ í˜ì´ì§€ëŠ” ì•„ì§ ì•ˆëì–´ -->
 		<div id="wellcome" style="display:none;">
-		Travel Diary¿¡¼­ »õ·Î¿î ¿©Çà ÀÏ±â¸¦ ³²°ÜºÁ :D<br><br>
+		Travel Diaryì—ì„œ ìƒˆë¡œìš´ ì—¬í–‰ ì¼ê¸°ë¥¼ ë‚¨ê²¨ë´ :D<br><br>
 		<button class="button btn-warning" onclick="window.location='/TravelDiary/td/diarylist.do'">
-		<span>¿©ÇàÀÏ±â ¸Àº¸±â:)</span></button>
+		<span>ì—¬í–‰ì¼ê¸° ë§›ë³´ê¸°:)</span></button>
 		<button class="button btn-warning" onclick="window.location=''">
 		<span>Join</span></button>
 		<button class="button btn-warning" onclick="window.location='/TravelDiary/td/login.do'">
 		<span>Login</span></button>
 		</div>
+		
+		
 		</center>
 				
 		<!-- start : filter-->
@@ -54,9 +58,9 @@
 		<div id="filters" class="filter-button" style="display:none;">
 		<center>
 			<button class="btncol button is-checked " data-filter="*">all</button>
-			/<button class="button btncol" data-filter=".full">¿Ï¼º</button>
-			/<button class="button btncol" data-filter=".foreign">ÇØ¿Ü</button>
-			/<button class="button btncol" data-filter=".internal">±¹³»</button>
+			/<button class="button btncol" data-filter=".full">ì™„ì„±</button>
+			/<button class="button btncol" data-filter=".foreign">í•´ì™¸</button>
+			/<button class="button btncol" data-filter=".internal">êµ­ë‚´</button>
 		</center>
 		</div>
 		<!-- end : filter -->
@@ -85,29 +89,29 @@
 $(document).ready(function(){
 	
 	 
-	//½ºÅ©·Ñ °¨Áö
+	//ìŠ¤í¬ë¡¤ ê°ì§€
     $(window).scroll(function(){  
         if  ($(window).scrollTop() == $(document).height() - $(window).height()){  
            lastPostFunc();
         }  
     });
 	
-	//·ÎµùÁß ¶ç¿ì±â
+	//ë¡œë”©ì¤‘ ë„ìš°ê¸°
     function lastPostFunc()  
     {  
 		var totalpnum = $("#totalpnum").val();
 		var pnum = $("#pagenum").val();
 		
 		if(pnum < totalpnum){
-	        $("#lastPostsLoader").html("·ÎµùÁß...");  
+	        $("#lastPostsLoader").html("ë¡œë”©ì¤‘...");  
 	        addList();
 		} else {
-			 $("#lastPostsLoader").html("¾øÀ½");
+			 $("#lastPostsLoader").html("ì—†ìŒ");
 		}
         
     };  
 
-    //¸ñ·Ï Ãß°¡
+    //ëª©ë¡ ì¶”ê°€
     function addList(){
     	var pageno = ($("#pagenum").val());
     	pageno++;
@@ -116,7 +120,7 @@ $(document).ready(function(){
     };
 
 	/*
-	//ÇØ½¬°ªÀÌ Á¸ÀçÇÏ¸é ±×¸¸Å¬ ºÒ·¯¿À°í Æ÷Ä¿½º ÁÖ±â, ¾øÀ¸¸é Ã¹ ÆäÀÌÁö ºÒ·¯¿À±â
+	//í•´ì‰¬ê°’ì´ ì¡´ì¬í•˜ë©´ ê·¸ë§Œí´ ë¶ˆëŸ¬ì˜¤ê³  í¬ì»¤ìŠ¤ ì£¼ê¸°, ì—†ìœ¼ë©´ ì²« í˜ì´ì§€ ë¶ˆëŸ¬ì˜¤ê¸°
 	if(document.location.hash){
 		
 		var hash = window.location.hash.replace("#", "");
@@ -141,10 +145,8 @@ $(document).ready(function(){
 	}
 	*/
 	
-	//·Î±×ÀÎµÈ »óÅÂ¶ó¸é
-	if($("#identify").val() == "member"){
-		$("#filters").css("display", "block");		
-		//ÇØ½Ã°ªÀÌ ÀÖÀ¸¸é ÆäÀÌÁö ÀÌµ¿
+	//ë¡œê·¸ì¸ëœ ìƒíƒœë¼ë©´
+		//í•´ì‹œê°’ì´ ìˆìœ¼ë©´ í˜ì´ì§€ ì´ë™
 		if(document.location.hash){
 			var hash = window.location.hash.replace("#", "");
 			var target = $("#"+hash);
@@ -154,18 +156,14 @@ $(document).ready(function(){
 			$("#pagenum").val(page);
 			
 			for(var i=1; i<=page; i++){
-				selectMydiaryList(i);
+				selectDiaryList(i);
 			}
 		
 			location.hash = "#page"+page;
-		//¾Æ´Ï¸é Ã¹ ÆäÀÌÁö ºÒ·¯¿À±â
+		//ì•„ë‹ˆë©´ ì²« í˜ì´ì§€ ë¶ˆëŸ¬ì˜¤ê¸°
 		}else{
-			selectMydiaryList(1);
+			selectDiaryList(1);
 		}
-	}else{
-		$("html, body").css("height", "100%");
-		$("#wellcome").css("display", "block");
-	}
 	
 });	
 </script>
@@ -173,33 +171,32 @@ $(document).ready(function(){
 <script type="text/javascript">
 
 
-//¸ñ·Ï Ãß°¡ ajax
-function selectMydiaryList(pageNo){
+//ëª©ë¡ ì¶”ê°€ ajax
+function selectDiaryList(pageNo){
     var comAjax = new ComAjax();
-    comAjax.setUrl("<c:url value='/td/mydiaryList.do' />");
+    comAjax.setUrl("<c:url value='/td/getdiarylist.do' />");
     comAjax.setCallback("Callback");
     comAjax.addParam("pagenum",pageNo);
     comAjax.ajax();
 }
  
 function Callback(data){
-	var id = data.userInfo.member_id;
     var total = data.total;
     var totalpnum = Math.ceil(total/9);
     var addpoint = $("#diary-wrapper");
     var last = $("#addlist");
    //	body.empty();
    
-   //ÃÑ ÆäÀÌÁö °¹¼ö ÀúÀå
+   //ì´ í˜ì´ì§€ ê°¯ìˆ˜ ì €ì¥
    $("#totalpnum").val(totalpnum);
   
     if(total == 0){
-        var str = "<center>ÀÛ¼ºµÈ ´ÙÀÌ¾î¸®°¡ ¾ø½À´Ï´Ù.</center>";
+        var str = "<center>ì‘ì„±ëœ ë‹¤ì´ì–´ë¦¬ê°€ ì—†ìŠµë‹ˆë‹¤.</center>";
         body.append(str);
     }
     else{
     	var path = "${pageContext.request.contextPath}/upload/";
-    	callbackMydiary(data, path);
+    	callbackDiaryList(data, path);
     }
     	/*
         var params = {
@@ -210,7 +207,7 @@ function Callback(data){
         };
         gfn_renderPaging(params);
          
-        //°ªÀ» °¡Á®¿Í¼­ »Ñ·ÁÁÖ´Â ºÎºĞ
+        //ê°’ì„ ê°€ì ¸ì™€ì„œ ë¿Œë ¤ì£¼ëŠ” ë¶€ë¶„
         var str = "";
         var pageNo = $("#pagenum").val();
         var i=1;
@@ -236,7 +233,7 @@ function Callback(data){
         	if(pro == 100)
         		basicClass = basicClass+"full ";
         	
-        	//Áö¿ª¿¡ µû¶ó Å¬·¡½º ÀÌ¸§ Ãß°¡
+        	//ì§€ì—­ì— ë”°ë¼ í´ë˜ìŠ¤ ì´ë¦„ ì¶”ê°€
     		if((value.location_code).indexOf('i')>-1){
     			className = basicClass+"internal";
     		} else if((value.location_code).indexOf("o")>-1){
@@ -269,7 +266,7 @@ function Callback(data){
         
       //  addpoint.append(str);
       //  addpoint.append("</div>");
-        //db limit°É±â, ³¯Â¥Ç¥½Ã ¼öÁ¤, num > id º¯°æ Ãâ·Â
+        //db limitê±¸ê¸°, ë‚ ì§œí‘œì‹œ ìˆ˜ì •, num > id ë³€ê²½ ì¶œë ¥
     }
     */
 }
@@ -292,7 +289,7 @@ function addtest(){
 	$container.append( $items ).isotope( 'appended', $items );
 }
 */
-//³¯Â¥ Çü½Ä º¯È¯
+//ë‚ ì§œ í˜•ì‹ ë³€í™˜
 /*
 var $container = $('#diary-wrapper');
 
@@ -325,7 +322,7 @@ function getDateString(jsonDate){
 
 function Pad(num) {
     num = "0" + num;
-    //slice(start, end) start<0ÀÌ¸é length+start
+    //slice(start, end) start<0ì´ë©´ length+start
     return num.slice(-2);
 }
 */

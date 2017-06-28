@@ -139,6 +139,22 @@ public class TdServiceImpl implements TdService {
 	}
 
 
+	@Override
+	public Map<String, Object> getDiaryList(Map<String, Object> map) throws Exception {
+		
+		Map<String, Object> resultmap  = new HashMap<String, Object>();
+		List<DiaryDTO> diarylist = tdDao.selectDiaryList(map);
+
+		List<Map<String, Object>> progress = tdDao.getProgress();
+		
+		resultmap.put("total", tdDao.getDiaryTotalCount());
+		resultmap.put("diaryList", diarylist);
+		resultmap.put("prog", progress);
+		
+		return resultmap;
+	}
+
+
 
 
 

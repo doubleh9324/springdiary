@@ -146,7 +146,7 @@
 			FROM
 				DAY
 			WHERE
-				member_num=#{mnum} AND diary_volum=#{dvol}
+				member_num= #{mnum} AND diary_volum= #{dvol}
 				and del_flag = 'n'
 	]]>		
 	</select>
@@ -219,6 +219,41 @@
 				and del_flag = 'n'
 	]]>		
 	</update>
+	
+	<select id="getDiaryTotalCount"
+			resultType="integer" >
+	<![CDATA[
+			select
+				count(*)
+			from 
+				diary
+			where
+				del_flag = 'n'
+	]]>	
+	
+	</select>
+	
+	<select id="selectDiaryList"
+			parameterType="hashmap"
+			resultMap="diary">
+		<![CDATA[
+			SELECT
+				member_num,
+				diary_volum,
+				diary_title,
+				time,
+				start_day,
+				end_day,
+				location_code,
+				diary_cover,
+				p_code
+			FROM
+				DIARY
+			WHERE
+				del_flag = 'n'
+			LIMIT #{pnum}, #{cnum}
+		]]>		
+	</select>
 	
 	
 	<resultMap type="traveldiary.td.dto.DiaryDTO" id="diary">

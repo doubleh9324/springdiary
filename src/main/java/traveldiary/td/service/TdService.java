@@ -19,6 +19,7 @@ public interface TdService {
 	testDTO testService() throws Exception;
 
 	Map<String, Object> getmDiaryList(Map<String, Object> map) throws Exception;
+	//다이어리 작성 시 select 항목에 쓰일 멤버 일기장 목록 가져오기
 	List<DiaryDTO> getmDiaryList(int mnum) throws Exception;
 	
 	Map<String, Object> doLogin(MemberDTO member) throws Exception;
@@ -28,4 +29,6 @@ public interface TdService {
 	Map<String, Object> getDayDetail(int dnum, int unum) throws Exception;
 	
 	int writeDay(DayDTO day) throws Exception;
+	
+	Map<String, Object> getDiaryList(Map<String, Object> map) throws Exception;
 }

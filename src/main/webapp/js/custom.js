@@ -570,7 +570,78 @@ function callbackMydiary(data, path){
             divId : "pagenav",
             pageIndex : "pagenum",
             totalCount : data.total,
-            eventName : "fn_selectBoardList"
+            eventName : "selectMydiaryList"
+        };
+        gfn_renderPaging(params);
+         
+        //값을 가져와서 뿌려주는 부분
+        var preimg = "";
+        var img="";
+        var postimg ="";
+        var pageNo = $("#pagenum").val();
+        var i=1;
+        var num = pageNo*9-9 ;
+        var pro = 0;
+    	var basicClass = "span4 diary-item html5 css3 responsive ";
+    	var className = null;
+        
+        
+        $.each(data.diaryList, function(key, value){
+        	if(num < 0)
+        		num = 0;
+        //	var start = getDateString(value.start_day);
+        //	var end = getDateString(value.end_day);
+        	
+        	$.each(data.progress, function(key, prog){
+        		if(prog.diary_volum == value.diary_volum)
+        			pro = prog.percent;
+        		
+        	});
+        	
+        	
+        	if(pro == 100)
+        		basicClass = basicClass+"full ";
+        	
+        	//지역에 따라 클래스 이름 추가
+    		if((value.location_code).indexOf('i')>-1){
+    			className = basicClass+"internal";
+    		} else if((value.location_code).indexOf("o")>-1){
+    			className = basicClass+"foreign";
+    		}
+        	
+        //	var dtm = GetDateString(value.CREA_DTM);
+            preimg = "<div id='diary' class='"+className+"'>"+
+            		"<div class='picture'id='"+ (num + i)+"'>"+
+            		"<a href='/TravelDiary/td/diarydays.do?dvol="+value.diary_volum+"&mnum="+value.member_num+"'>";
+            img=     "<img src='"+path+value.diary_cover+"' alt='' class='dcover'/>"; 
+            postimg=            "<div class='image-overlay-link'></div></a>"+
+                        	"<div class='item-description alt'>" +
+	                        	"<h5><a href='diarydays.jsp?dvol="+value.diary_volum+"'>"+value.diary_title +"</a></h5>"+
+	                        	"<p>"+value.start_day+"-"+value.end_day+"<br>"+
+	                        	"vol."+value.diary_volum+"</p>"+
+                        	"</div>" +
+                        "</div>"+
+                    "</div>"+
+                    "</div>";
+                    i++;
+                    loadMorePosts(preimg+img+postimg);
+        });
+        var anchor = "<a id='page"+pageNo+"'>";
+
+}
+
+
+function callbackDiaryList(data, path){
+	
+    var total = data.total;
+    var totalpnum = Math.ceil(total/9);
+    var addpoint = $("#diary-wrapper");
+    
+	var params = {
+            divId : "pagenav",
+            pageIndex : "pagenum",
+            totalCount : data.total,
+            eventName : "selectDiaryList"
         };
         gfn_renderPaging(params);
          

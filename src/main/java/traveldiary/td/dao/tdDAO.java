@@ -126,4 +126,23 @@ public class tdDAO extends AbstractDAO{
 	public void plusHits(int dnum) throws Exception{
 		update("td.plusHits", dnum);
 	}
+	
+	public int getDiaryTotalCount() throws Exception{
+		return (Integer) selectOne("td.getDiaryTotalCount");
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<DiaryDTO> selectDiaryList(Map<String, Object> map) throws Exception{
+		
+		int pnum = Integer.parseInt((String)map.get("pnum"));
+		
+		if(pnum>0)
+			map.put("pnum", (pnum-1)*9);
+		else
+			map.put("pnum",0);
+		
+		map.put("cnum", 9);
+		
+		return (List<DiaryDTO>)selectList("td.selectDiaryList", map);
+	}
 }

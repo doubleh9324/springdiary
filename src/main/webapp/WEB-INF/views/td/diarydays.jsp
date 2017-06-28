@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-<title>Insert title here</title>
+<title>Travel Diary</title>
 <%@ include file="/WEB-INF/include/include-header.jspf" %>
 </head>
 <body>

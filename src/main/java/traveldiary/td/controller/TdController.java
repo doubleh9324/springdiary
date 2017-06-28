@@ -238,7 +238,7 @@ public class TdController {
 	
 
 	@RequestMapping(value="/td/diarydaylist.do")
-	public ModelAndView selectdiarydaylist(HttpServletRequest request) throws Exception{
+	public ModelAndView getdiarydaylist(HttpServletRequest request) throws Exception{
 		ModelAndView mv = new ModelAndView("jsonView");
 		Map<String, Object> resultmap = new HashMap<String, Object>();
 		
@@ -335,6 +335,49 @@ public class TdController {
 		}
 		
 		mv.addObject("failFlag", "fail");
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/td/diarylist.do")
+	public ModelAndView openDiarylistPage(HttpServletRequest request) throws Exception{
+		ModelAndView mv = new ModelAndView("/td/diarylist");
+		
+		HttpSession session = request.getSession(false);
+		String status = (String) session.getAttribute("status");
+		
+		if(status.equals("logout")){
+			mv.addObject("identify", "guest");
+		} else {
+			mv.addObject("identify", "member");
+		}
+		
+		return mv;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/td/getdiarylist.do")
+	public ModelAndView getDiaryList(HttpServletRequest request, String identify, CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		List<DiaryDTO> diary = null;
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+		int total = 0;
+		
+		//diary dto
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("pnum", commandMap.getMap().get("pagenum"));
+		resultmap = (Map<String, Object>) tdService.getDiaryList(map);
+		diary = (List<DiaryDTO>) resultmap.get("diaryList");
+
+		//total count
+		total = (Integer) resultmap.get("total");
+	
+				
+		mv.addObject("total", total);
+		mv.addObject("progress", (List<Map<String, Object>>) resultmap.get("prog"));
+		mv.addObject("diaryList", diary);
+		
 		
 		return mv;
 	}
