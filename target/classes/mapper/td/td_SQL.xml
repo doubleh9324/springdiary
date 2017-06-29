@@ -36,6 +36,7 @@
 				time,
 				start_day,
 				end_day,
+				loc_detail,
 				location_code,
 				diary_cover,
 				p_code
@@ -151,6 +152,20 @@
 	]]>		
 	</select>
 	
+		<select id="selectDayList"
+			parameterType="hashmap"
+			resultType="traveldiary.td.dto.DayDTO">
+	<![CDATA[
+			SELECT
+				*
+			FROM
+				DAY
+			WHERE
+				del_flag = 'n'
+			limit #{pnum}, #{cnum}
+	]]>		
+	</select>
+		
 	<select id="selectdRecount"
 			parameterType="hashmap"
 			resultType="hashmap">
@@ -255,6 +270,60 @@
 		]]>		
 	</select>
 	
+	<select id="selectDiaryInfo"
+			parameterType="hashmap"
+			resultMap="diary">
+		<![CDATA[
+			SELECT
+				*
+			FROM
+				DIARY
+			WHERE
+				del_flag = 'n'
+				and member_num = #{mnum} and diary_volum = #{dvol}
+		]]>		
+	</select>
+	
+	<select id="selectLocation"
+			parameterType = "string"
+			resultType="string">
+		<![CDATA[
+			select
+				location
+			from 
+				location
+			where
+				location_code = #{l_code}
+		]]>		
+	</select>
+	
+	<select id="selectDayCount"
+			resultType="integer">
+		<![CDATA[
+			select
+				count(*)
+			from 
+				day
+			where
+				del_flag='n'
+		]]>		
+	</select>
+	
+	<select id="selectReCount"
+			parameterType="hashmap"
+			resultType="hashmap">
+		<![CDATA[
+				SELECT
+					a.day_num,
+					count(*) as count
+				FROM
+					day a join reply b
+				WHERE
+					a.day_num= b.day_num
+					and b.del_flag = 'n'
+					group by a.day_num
+		]]>		
+	</select>
 	
 	<resultMap type="traveldiary.td.dto.DiaryDTO" id="diary">
 		<result property="member_num" column="MEMBER_NUM"/>
@@ -263,6 +332,7 @@
 		<result property="time" column="TIME"/>
 		<result property="start_day" column="START_DAY"/>
 		<result property="end_day" column="END_DAY"/>
+		<result property="loc_detail" column="LOC_DETAIL"/>
 		<result property="location_code" column="LOCATION_CODE"/>
 		<result property="diary_cover" column="DIARY_COVER"/>
 		<result property="p_code" column="P_CODE"/>

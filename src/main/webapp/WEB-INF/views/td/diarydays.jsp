@@ -30,7 +30,12 @@
 		<!-- end : Page Title -->
 		
 		<center>
-		I'm a ${identify}
+		I'm a ${identify}<br>
+		<b>${diaryInfo.diary_title }</b><br>
+		${diaryInfo.start_day } - ${diaryInfo.end_day }<br>
+		Travel in ${location }
+		
+		
 		<input type="hidden" id="identify" name="identify" value="${identify}">
 		<input type="hidden" id="mnum" name="mnum" value="${mnum }">
 		<input type="hidden" id="dvol" name="dvol" value="${dvol }">
@@ -90,7 +95,7 @@
 			
 			<button class="button btn-warning" onclick="openWriteDay(${dvol})">
 			<span>일기쓰기</span></button>
-			<button class="button btn-warning" onclick="javascript:window.location='/td/modifyDiary.do?dvol=${dvol}&userNum=${mnum}'">
+			<button class="button btn-warning" onclick="openModifyDiary(${dvol})">
 			<span>일기장 수정</span></button>
 			<button class="button btn-warning" onclick="javascript:deleteDiary(${dvol}, ${mnum})">
 			<span>일기장 삭제</span></button>
@@ -223,6 +228,12 @@ function openWriteDay(dvol){
     comSubmit.submit();
 }
 
+function openModifyDiary(dvol){
+	var comSubmit = new ComSubmit();
+    comSubmit.setUrl("<c:url value='/td/openModifyDiary.do' />");
+    comSubmit.addParam("dvol", dvol);
+    comSubmit.submit();
+}
 
 </script>
 

@@ -23,11 +23,6 @@ public class TdServiceImpl implements TdService {
     @Resource(name="tdDAO")
     private tdDAO tdDao;
 	
-	//전체 일기 항목 가져오기
-	@Override
-	public DayListViewDTO getDayList() throws Exception {
-		return null;
-	}
 
 
 	@Override
@@ -152,6 +147,50 @@ public class TdServiceImpl implements TdService {
 		resultmap.put("prog", progress);
 		
 		return resultmap;
+	}
+
+
+	@Override
+	public Map<String, Object> getDiaryInfo(int mnum, int dvol) throws Exception {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+		
+		map.put("mnum", mnum);
+		map.put("dvol", dvol);
+		
+		DiaryDTO diaryInfo = new DiaryDTO();
+		diaryInfo = tdDao.getDiaryInfo(map);
+		resultmap.put("diaryInfo", diaryInfo);
+		resultmap.put("location", tdDao.getLocation(diaryInfo.getLocation_code()));
+		
+		return resultmap;
+	}
+
+
+	@Override
+	public Map<String, Object> getDayList(Map<String, Object> map) throws Exception {
+		
+		Map<String, Object> resultmap  = new HashMap<String, Object>();
+		List<DayDTO> daylist = tdDao.getDayList(map); 
+		List<Map<String, Object>> reCount = tdDao.getReCount();
+		
+		
+		resultmap.put("total", tdDao.getDayTotal());
+		resultmap.put("dayList", daylist);
+		resultmap.put("reCount",  reCount);
+		
+		return resultmap;
+	}
+
+
+	@Override
+	public int modifyDiary(Map<String, Object> map) throws Exception {
+		return tdDao.modifyDiary(map);
+	}
+	
+	public int writeDiary(CommandMap commandMap) throws Exception {
+		return tdDao.writeDiary(commandMap);
 	}
 
 

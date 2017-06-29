@@ -1,10 +1,13 @@
 package traveldiary.td.dao;
 
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import traveldiary.common.common.CommandMap;
 import traveldiary.common.dao.AbstractDAO;
 import traveldiary.td.dto.DayDTO;
 import traveldiary.td.dto.DayListViewDTO;
@@ -144,5 +147,56 @@ public class tdDAO extends AbstractDAO{
 		map.put("cnum", 9);
 		
 		return (List<DiaryDTO>)selectList("td.selectDiaryList", map);
+	}
+	
+	public DiaryDTO getDiaryInfo(Map<String, Object> map){
+		return (DiaryDTO) selectOne("td.selectDiaryInfo", map);
+	}
+	
+	public String getLocation(String l_code){
+		return (String) selectOne("td.selectLocation", l_code);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<DayDTO> getDayList(Map<String, Object> map) throws Exception {
+		int pnum = Integer.parseInt((String)map.get("pnum"));
+		
+		if(pnum>0)
+			map.put("pnum", (pnum-1)*20);
+		else
+			map.put("pnum",0);
+		
+		map.put("cnum", 20);
+		return (List<DayDTO>) selectList("td.selectDayList", map);
+	}
+	
+	public int getDayTotal() throws Exception{
+		return (Integer) selectOne("td.selectDayCount");
+	}
+	
+	//특정 일기장의 일기 목록에 쓰일 댓글 수 리스트 반환 map(mnum, dvol) 매개변수로 받기
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> getReCount() throws Exception{
+		return (List<Map<String, Object>>) selectList("td.selectReCount");
+	}
+	
+	public int modifyDiary(Map<String, Object> map) throws Exception{
+		try{
+			update("td.updateDiary", map);
+			return 1;
+		}catch(Exception e){
+			e.getMessage();
+			return -1;
+		}
+	}
+	
+	public int writeDiary(CommandMap commandMap) throws Exception{
+		try{
+			insert("td.insertDiary", commandMap);
+			return 1;
+		}catch(Exception e){
+			e.getMessage();
+			return -1;
+		}
 	}
 }

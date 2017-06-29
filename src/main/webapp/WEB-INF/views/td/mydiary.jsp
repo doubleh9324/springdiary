@@ -37,7 +37,9 @@
 		<center>
 		I'm a ${identify}
 		<input type="hidden" id="identify" name="identify" value="${identify}"><br>
-		<!-- 다이어리 구경 페이지는 아직 안됐어 -->
+		<button class="button btn-warning" onclick="window.location='/TravelDiary/td/writeDiary.do'">
+		<span>새 일기장 만들기:)</span></button>
+		
 		<div id="wellcome" style="display:none;">
 		Travel Diary에서 새로운 여행 일기를 남겨봐 :D<br><br>
 		<button class="button btn-warning" onclick="window.location='/TravelDiary/td/diarylist.do'">
@@ -201,134 +203,8 @@ function Callback(data){
     	var path = "${pageContext.request.contextPath}/upload/";
     	callbackMydiary(data, path);
     }
-    	/*
-        var params = {
-            divId : "pagenav",
-            pageIndex : "pagenum",
-            totalCount : total,
-            eventName : "fn_selectBoardList"
-        };
-        gfn_renderPaging(params);
-         
-        //값을 가져와서 뿌려주는 부분
-        var str = "";
-        var pageNo = $("#pagenum").val();
-        var i=1;
-        var num = pageNo*9-9 ;
-        var pro = 0;
-    	var basicClass = "span4 diary-item html5 css3 responsive ";
-    	var className = null;
-        
-        
-        $.each(data.diaryList, function(key, value){
-        	if(num < 0)
-        		num = 0;
-        	var start = getDateString(value.start_day);
-        	var end = getDateString(value.end_day);
-        	
-        	$.each(data.progress, function(key, prog){
-        		if(prog.diary_volum == value.diary_volum)
-        			pro = prog.percent;
-        		
-        	});
-        	
-        	
-        	if(pro == 100)
-        		basicClass = basicClass+"full ";
-        	
-        	//지역에 따라 클래스 이름 추가
-    		if((value.location_code).indexOf('i')>-1){
-    			className = basicClass+"internal";
-    		} else if((value.location_code).indexOf("o")>-1){
-    			className = basicClass+"foreign";
-    		}
-        	
-        //	var dtm = GetDateString(value.CREA_DTM);
-            str += "<div id='diary' class='"+className+"'>"+
-            		"<div class='picture'id='"+ (num + i)+"'>"+
-            		"<a href='diarydays.jsp?dvol="+value.diary_volum+"&mnum="+value.member_num+"' title='Title'>"+
-                        "<img src='${pageContext.request.contextPath}/upload/"+ value.diary_cover +"' alt='' class='dcover'/>" + 
-                        "<div class='image-overlay-link'></div></a>"+
-                        	"<div class='item-description alt'>" +
-	                        	"<h5><a href='diarydays.jsp?dvol="+value.diary_volum+"'>"+value.diary_title +"</a></h5>"+
-	                        	"<p>"+start+"-"+end+"<br>"+
-	                        	"vol."+value.diary_volum+"</p>"+
-                        	"</div>" +
-                        "</div>"+
-                    "</div>"+
-                    "</div>";
-                    i++;
-
-        });
-        var anchor = "<a id='page"+pageNo+"'>";
-       // addpoint.append(anchor+str);
-      loadMorePosts(str);
-  		//addpoint.isotope().append(str);
-  		//addpoint.isotope('appended', str);
-        // isotope();
-        
-      //  addpoint.append(str);
-      //  addpoint.append("</div>");
-        //db limit걸기, 날짜표시 수정, num > id 변경 출력
-    }
-    */
+    	
 }
-
-/*
-function getItemElement(item) {
-	  var $item = item;
-
-	  var test = 'isotope-item';
-	  $item.addClass(test);
-	  return $item;
-	}
-
-function addtest(){
-	var $container = $('#diary-wrapper').isotope({
-		  itemSelector: '.diary-item',
-		});
-	
-	$items = getItemElement().add( getItemElement() ).add( getItemElement() ).add( getItemElement() ).add( getItemElement() ).add( getItemElement() ).add( getItemElement() ).add( getItemElement() ).add( getItemElement() );
-	$container.append( $items ).isotope( 'appended', $items );
-}
-*/
-//날짜 형식 변환
-/*
-var $container = $('#diary-wrapper');
-
-function loadMorePosts(additem) {
-	
-	$container.append(additem).imagesLoaded(function() {
-		$container.isotope( 'appended', additem );
-		  });
-};
-
-	*/
-	
-	/*
-function getDateString(jsonDate){
-	var year, month, day, hour, minute, second , returnValue  , date ,replaceStr
-	 
-    date = new Date(jsonDate);
-    year = date.getFullYear();
-    month = Pad(date.getMonth());
-    day = Pad(date.getDate());
-   // hour = Pad(date.getHours());
-  //  minute = Pad(date.getMinutes());
-  //  second = Pad(date.getSeconds());
-
-    returnValue = year + "/" + month + "/" + day;
-
- //   window.alert(returnValue);
-    return returnValue;
-}
-
-function Pad(num) {
-    num = "0" + num;
-    //slice(start, end) start<0이면 length+start
-    return num.slice(-2);
-}
-*/
 </script>
 
 </body>

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -229,6 +230,12 @@ public class TdController {
 			
 			mv.addObject("identify", "member");
 		}
+		
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+		resultmap = tdService.getDiaryInfo(mnum, dvol);
+		
+		mv.addObject("diaryInfo", resultmap.get("diaryInfo"));
+		mv.addObject("location", resultmap.get("location"));
 		mv.addObject("userInfo",userInfo);
 		mv.addObject(mnum);
 		mv.addObject(dvol);
@@ -238,7 +245,7 @@ public class TdController {
 	
 
 	@RequestMapping(value="/td/diarydaylist.do")
-	public ModelAndView getdiarydaylist(HttpServletRequest request) throws Exception{
+	public ModelAndView getdiarydaylist(HttpServletRequest request, int mnum, int dvol) throws Exception{
 		ModelAndView mv = new ModelAndView("jsonView");
 		Map<String, Object> resultmap = new HashMap<String, Object>();
 		
@@ -256,13 +263,15 @@ public class TdController {
 			
 			//day dto
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("mnum", Integer.parseInt(request.getParameter("mnum")));
-			map.put("dvol", Integer.parseInt(request.getParameter("dvol")));
+		//	map.put("mnum", Integer.parseInt(request.getParameter("mnum")));
+		//	map.put("dvol", Integer.parseInt(request.getParameter("dvol")));
+			map.put("mnum",  mnum);
+			map.put("dvol",  dvol);
 			resultmap = (Map<String, Object>) tdService.getDiaryDays(map);
 			
+			mv.addObject("progress", resultmap.get("prog"));
 
 			mv.addObject("dayList",resultmap.get("dayList"));
-			mv.addObject("progress", resultmap.get("prog"));
 			mv.addObject("total", resultmap.get("total"));
 			mv.addObject("replyCount", resultmap.get("reCount"));
 			
@@ -381,6 +390,169 @@ public class TdController {
 		
 		return mv;
 	}
+	
+	@RequestMapping(value="/td/days.do")
+	public ModelAndView opendays(HttpServletRequest request) throws Exception{
+		ModelAndView mv = new ModelAndView("/td/daylist");
+		
+		HttpSession session = request.getSession(false);
+		String status = session.getAttribute("status").toString();
+		MemberDTO userInfo = null;
+		
+		//로그인 상태 구분해서 열람 수정하기
+		if(status.equals("guest")){
+			mv.addObject("identify", "guest");
+		}else{
+			//멤버면 userinfo 가져오기
+			userInfo = (MemberDTO)session.getAttribute("userInfo");
+			
+			mv.addObject("identify", "member");
+		}
+		
+		mv.addObject("userInfo",userInfo);
+		
+		return mv;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value="/td/daylist.do")
+	public ModelAndView getDayList(HttpServletRequest request, String identify, CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		List<DayDTO> daylist = null;
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+		int total = 0;
+		
+		//day dto
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("pnum", commandMap.getMap().get("pagenum"));
+		resultmap = (Map<String, Object>) tdService.getDayList(map);
+		daylist = (List<DayDTO>) resultmap.get("dayList");
+
+		//total count
+		total = (Integer) resultmap.get("total");
+		
+				
+		mv.addObject("total", total);
+		mv.addObject("dayList", daylist);
+		mv.addObject("replyCount", resultmap.get("reCount"));
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/td/openModifyDiary.do")
+	public ModelAndView openModifyDiary(HttpServletRequest request,
+										@RequestParam(value="dvol", required=true)int dvol) throws Exception{
+		ModelAndView mv = new ModelAndView("/td/modifydiary");
+		
+		mv.addObject("dvol", dvol);
+		
+		request.setAttribute("dvol", dvol);
+		
+		HttpSession session = request.getSession(false);
+		String status = (String) session.getAttribute("status");
+		
+		MemberDTO userInfo = new MemberDTO();
+		
+		if(status.equals("login")){
+			userInfo = (MemberDTO) session.getAttribute("userInfo");
+			mv.addObject("userInfo", userInfo);
+		}
+		
+		// 수정하기위해 원래 다이어리 정보 가져오기
+		mv.addObject("diaryInfo", tdService.getDiaryInfo(userInfo.getMember_num(), dvol));
+		
+		return mv;
+	}
+	
+	//시간 경과에 의핸 세션 해제는 나중에 수정하기
+	@RequestMapping(value="/td/modifyDiary.do")
+	public ModelAndView modifyDiary(HttpServletRequest request, DiaryDTO diary) throws Exception{
+		ModelAndView mv = new ModelAndView("/td/diarydays");
+		
+		HttpSession session = request.getSession(false);
+		String status = (String) session.getAttribute("status");
+		
+		MemberDTO userInfo = (MemberDTO) session.getAttribute("userInfo");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("dvol", request.getAttribute("dvol"));
+		map.put("mnum", userInfo.getMember_num());
+		map.put("diary",  diary);
+		
+		int re = tdService.modifyDiary(map);
+		
+		//update가 성공하면 내용 불러와서 해당 일기장 일기목록으로 보내기
+		if(re>0){
+			//day dto
+			Map<String, Object> remap = new HashMap<String, Object>();
+			Map<String, Object> resultmap = new HashMap<String, Object>();
+		//	map.put("mnum", Integer.parseInt(request.getParameter("mnum")));
+		//	map.put("dvol", Integer.parseInt(request.getParameter("dvol")));
+			remap.put("mnum",  userInfo.getMember_num());
+			remap.put("dvol", map.get("dvol"));
+			resultmap = (Map<String, Object>) tdService.getDiaryDays(map);
+			
+			mv.addObject("progress", resultmap.get("prog"));
+
+			mv.addObject("dayList",resultmap.get("dayList"));
+			mv.addObject("total", resultmap.get("total"));
+			mv.addObject("replyCount", resultmap.get("reCount"));
+		} else{
+			mv.addObject("failFlag", "fail");
+		}
+		
+		return mv;
+	}
+	
+	@RequestMapping(value="/td/openWriteDiary.do")
+	public ModelAndView openWriteDiary(HttpServletRequest request) throws Exception{
+		ModelAndView mv = new ModelAndView("/td/writediary");
+		
+		HttpSession session = request.getSession(false);
+		String status = (String) session.getAttribute("status");
+		
+		MemberDTO userInfo = new MemberDTO();
+		
+		if(status.equals("login")){
+			userInfo = (MemberDTO) session.getAttribute("userInfo");
+			mv.addObject("userInfo", userInfo);
+		}
+		
+		return mv;
+	}
+	
+	/*
+	//시간 경과에 의핸 세션 해제는 나중에 수정하기
+	@RequestMapping(value="/td/writeDiary.do")
+	public ModelAndView writeDiary(HttpServletRequest request, CommandMap commandmap){
+		ModelAndView mv = new ModelAndView("/td/daydetail");
+		
+		HttpSession session = request.getSession(false);
+		String status = (String) session.getAttribute("status");
+		
+		MemberDTO userInfo = (MemberDTO) session.getAttribute("userInfo");
+		
+		try {
+			int dnum = tdService.writeDiary(commandmap.getMap());
+			
+			//insert가 성공하면 내용 불러와서 상세화면으로 보내기
+			if(dnum>0)
+				mv.addObject("day", (DayDTO)tdService.getDayDetail(dnum, userInfo.getMember_num()).get("day"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		mv.addObject("failFlag", "fail");
+		
+		return mv;
+	}
+	*/
+	
+	
+	
+	
+	
 }
 	
 	

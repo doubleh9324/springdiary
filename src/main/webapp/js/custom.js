@@ -525,14 +525,14 @@ function callbackDiarydays(data, path){
         var pageNo = $("#pagenum").val();
         var i=1;
         var num = pageNo*20-20 ;
-        var reCount = 0;
+
         var title="";
         $.each(data.dayList, function(key, value){
         	if(num < 0)
         		num = 0;
        // 	var day_time = getDateString(value.day_time);
        // 	var time = getDateString(value.time);
-        	
+            var reCount = 0;
         	$.each(data.replyCount, function(key, reply){
         		if(reply.day_num == value.day_num)
         			reCount = reply.count;
@@ -581,12 +581,14 @@ function callbackMydiary(data, path){
         var pageNo = $("#pagenum").val();
         var i=1;
         var num = pageNo*9-9 ;
-        var pro = 0;
+
     	var basicClass = "span4 diary-item html5 css3 responsive ";
     	var className = null;
         
         
         $.each(data.diaryList, function(key, value){
+            var pro = 0;
+            
         	if(num < 0)
         		num = 0;
         //	var start = getDateString(value.start_day);
@@ -688,8 +690,8 @@ function callbackDiaryList(data, path){
             postimg=            "<div class='image-overlay-link'></div></a>"+
                         	"<div class='item-description alt'>" +
 	                        	"<h5><a href='diarydays.jsp?dvol="+value.diary_volum+"'>"+value.diary_title +"</a></h5>"+
-	                        	"<p>"+value.start_day+"-"+value.end_day+"<br>"+
-	                        	"vol."+value.diary_volum+"</p>"+
+	                        	"<p>"+value.start_day+"-"+value.end_day+"<br><b>"+
+	                        	value.member_num + "</b>  vol."+value.diary_volum+"</p>"+
                         	"</div>" +
                         "</div>"+
                     "</div>"+
@@ -699,4 +701,59 @@ function callbackDiaryList(data, path){
         });
         var anchor = "<a id='page"+pageNo+"'>";
 
+}
+
+function callbackDayList(data){
+	
+    var total = data.total;
+    var totalpnum = Math.ceil(total/9);
+    var addpoint = $("table>tbody");
+    
+	var params = {
+            divId : "pagenav",
+            pageIndex : "pagenum",
+            totalCount : data.total,
+            eventName : "selectDayList"
+        };
+        gfn_renderPaging(params);
+         
+        //값을 가져와서 뿌려주는 부분
+        var pageNo = $("#pagenum").val();
+        var i=1;
+        var num = pageNo*20-20 ;
+
+        var title="";
+        var str="";
+        
+        $.each(data.dayList, function(key, value){
+        	if(num < 0)
+        		num = 0;
+            var reCount = 0;
+        	
+        	$.each(data.replyCount, function(key, reply){
+        		
+        		if(value.day_num == reply.day_num){
+        			reCount = reply.count;
+        		}
+        	});
+        	
+        	if(reCount>0)
+        		title = value.day_title+"("+reCount+")";
+        	else
+        		title = value.day_title;
+        	
+        	str += "<tr id'"+(num+i)+"'>"+
+        			"<td>" + value.day_num + "</td>"+
+        			"<td style='text-align:left; padding-left:5%'>" +
+        				"<a href='#'"+(num+i)+"' name='title' onclick='openDayDetail("+value.day_num+","+(num+i)+")'>" 
+        				+ title+"</a></td>"+
+        			"<td>" + value.member_num + "</td>" +
+        			"<td>" + value.day_time + "</td>"+
+        			"<td>" + value.time + "</td>"+
+        			"<td>" + value.hits + "</td>"+
+        			"</tr>";
+        	
+        });
+        var anchor = "<a id='page"+pageNo+"'>";
+        addpoint.append(str);
 }

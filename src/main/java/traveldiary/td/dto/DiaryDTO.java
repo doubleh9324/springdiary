@@ -12,6 +12,7 @@ public class DiaryDTO {
 	private String start_day;
 	private String end_day;
 	private String location_code;
+	private String loc_detail;
 	private String diary_cover;
 	private String p_code;
 	private String del_flag;
@@ -108,5 +109,13 @@ public class DiaryDTO {
 	public String setDateFormat(Date d){
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 		return formatter.format(d);
+	}
+
+	public String getLoc_detail() {
+		return loc_detail;
+	}
+
+	public void setLoc_detail(String loc_detail) {
+		this.loc_detail = loc_detail;
 	}
 }
