@@ -14,6 +14,7 @@ import traveldiary.td.dto.DayDTO;
 import traveldiary.td.dto.DayListViewDTO;
 import traveldiary.td.dto.DiaryDTO;
 import traveldiary.td.dto.MemberDTO;
+import traveldiary.td.dto.ReplyDTO;
 import traveldiary.td.dto.testDTO;
 
 //tdService라는 서비스 객체 선언
@@ -30,7 +31,6 @@ public class TdServiceImpl implements TdService {
 		
 		testDTO testDto = new testDTO();
 		testDto.setService("나ㄴㅡㄴ 서비스");
-		
 		
 		return testDto;
 	}
@@ -191,6 +191,16 @@ public class TdServiceImpl implements TdService {
 	
 	public int writeDiary(CommandMap commandMap) throws Exception {
 		return tdDao.writeDiary(commandMap);
+	}
+
+
+	@Override
+	public Map<String, Object> getReplyList(Map<String, Object> map) throws Exception {
+		Map<String, Object> resultmap = new HashMap<String, Object>();
+		resultmap.put("replyList", tdDao.getReplyList(map));
+	//	resultmap.put("total", tdDao.getReCount((Integer)map.get("dnum")));
+		
+		return resultmap;
 	}
 
 

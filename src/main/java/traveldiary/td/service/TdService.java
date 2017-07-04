@@ -37,5 +37,7 @@ public interface TdService {
 	
 	int modifyDiary(Map<String, Object> map) throws Exception;
 	
+	Map<String, Object> getReplyList(Map<String, Object> map) throws Exception;
+	
 	
 }

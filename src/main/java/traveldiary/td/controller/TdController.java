@@ -19,6 +19,7 @@ import traveldiary.common.common.CommandMap;
 import traveldiary.td.dto.DayDTO;
 import traveldiary.td.dto.DiaryDTO;
 import traveldiary.td.dto.MemberDTO;
+import traveldiary.td.dto.ReplyDTO;
 import traveldiary.td.dto.testDTO;
 import traveldiary.td.service.TdService;
 
@@ -222,7 +223,7 @@ public class TdController {
 		request.setAttribute("dvol", dvol);
 		
 		//로그인 상태 구분해서 열람 수정하기
-		if(status.equals("guest")){
+		if(status.equals("logout")){
 			mv.addObject("identify", "guest");
 		}else{
 			//멤버면 userinfo 가져오기
@@ -400,7 +401,7 @@ public class TdController {
 		MemberDTO userInfo = null;
 		
 		//로그인 상태 구분해서 열람 수정하기
-		if(status.equals("guest")){
+		if(status.equals("logout")){
 			mv.addObject("identify", "guest");
 		}else{
 			//멤버면 userinfo 가져오기
@@ -548,6 +549,27 @@ public class TdController {
 		return mv;
 	}
 	*/
+	
+	@RequestMapping(value="/td/replylist.do")
+	public ModelAndView getReplyList(CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		Map<String, Object> resultmap = tdService.getReplyList(commandMap.getMap());
+		
+		mv.addObject("replyList", resultmap.get("replyList"));
+		mv.addObject("totalcount", resultmap.get("total"));
+		
+		return mv;
+	}
+	
+	//댓글을 쓰고나서 리스트를 다시 불러온 후 json으로 넘겨주고 새로 작성하기
+	@RequestMapping(value="/td/writereply.do")
+	public ModelAndView writeReply(CommandMap commandMap) throws Exception{
+		ModelAndView mv = new ModelAndView("jsonView");
+		
+		return mv;
+	}
+	
 	
 	
 	

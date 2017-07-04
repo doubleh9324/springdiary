@@ -13,6 +13,7 @@ import traveldiary.td.dto.DayDTO;
 import traveldiary.td.dto.DayListViewDTO;
 import traveldiary.td.dto.DiaryDTO;
 import traveldiary.td.dto.MemberDTO;
+import traveldiary.td.dto.ReplyDTO;
 
 /**
  * Repository : DAO를 스프링에 인식시키기 위해서 주로 사용.
@@ -180,6 +181,11 @@ public class tdDAO extends AbstractDAO{
 		return (List<Map<String, Object>>) selectList("td.selectReCount");
 	}
 	
+	//특정 일기의 댓글 총 갯수 가져오기
+	public int getReCount(int dnum) throws Exception{
+		return (Integer) selectOne("td.selectOneReCount");
+	}
+	
 	public int modifyDiary(Map<String, Object> map) throws Exception{
 		try{
 			update("td.updateDiary", map);
@@ -198,5 +204,10 @@ public class tdDAO extends AbstractDAO{
 			e.getMessage();
 			return -1;
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ReplyDTO> getReplyList(Map<String, Object> map) throws Exception{
+		return (List<ReplyDTO>) selectList("td.selectReplyList", map);
 	}
 }

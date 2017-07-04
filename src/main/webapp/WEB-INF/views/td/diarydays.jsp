@@ -25,7 +25,7 @@
 		<div id="page-title">
 			<div id="page-title-inner">
 			<h2><span>My Days</span></h2>
-			</div>				
+			</div>
 		</div>
 		<!-- end : Page Title -->
 		
@@ -181,7 +181,7 @@ $(document).ready(function(){
 	$("html, body").css("height", "100%");
 	
 	//해당하는 일기장이 로그인된  user의 일기장이면 표시할 버튼
-	if($("#identify").val() == "member"){
+	//if($("#identify").val() == "login"){
 		
 		
 
@@ -203,10 +203,10 @@ $(document).ready(function(){
 		}else{
 			selectdaylist(1);
 		}
-	}else{
-		$("html, body").css("height", "100%");
-		$("#wellcome").css("display", "block");
-	}
+//	}else{
+//		$("html, body").css("height", "100%");
+//		$("#wellcome").css("display", "block");
+//	}
 	
 });	
 

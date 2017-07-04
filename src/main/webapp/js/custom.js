@@ -581,12 +581,11 @@ function callbackMydiary(data, path){
         var pageNo = $("#pagenum").val();
         var i=1;
         var num = pageNo*9-9 ;
-
-    	var basicClass = "span4 diary-item html5 css3 responsive ";
     	var className = null;
         
         
         $.each(data.diaryList, function(key, value){
+        	var basicClass = "span4 diary-item html5 css3 responsive ";
             var pro = 0;
             
         	if(num < 0)
@@ -597,7 +596,6 @@ function callbackMydiary(data, path){
         	$.each(data.progress, function(key, prog){
         		if(prog.diary_volum == value.diary_volum)
         			pro = prog.percent;
-        		
         	});
         	
         	
@@ -654,12 +652,13 @@ function callbackDiaryList(data, path){
         var pageNo = $("#pagenum").val();
         var i=1;
         var num = pageNo*9-9 ;
-        var pro = 0;
-    	var basicClass = "span4 diary-item html5 css3 responsive ";
     	var className = null;
         
         
         $.each(data.diaryList, function(key, value){
+            var pro = 0;
+        	var basicClass = "span4 diary-item html5 css3 responsive ";
+        	
         	if(num < 0)
         		num = 0;
         //	var start = getDateString(value.start_day);
@@ -668,7 +667,6 @@ function callbackDiaryList(data, path){
         	$.each(data.progress, function(key, prog){
         		if(prog.diary_volum == value.diary_volum)
         			pro = prog.percent;
-        		
         	});
         	
         	
@@ -755,5 +753,85 @@ function callbackDayList(data){
         	
         });
         var anchor = "<a id='page"+pageNo+"'>";
+        addpoint.append(str);
+}
+
+function callbackReplyList(data){
+	
+    var total = data.total;
+    var totalpnum = Math.ceil(total/9);
+    var addpoint = $("#addlist");
+    
+	var params = {
+            divId : "pagenav",
+            pageIndex : "pagenum",
+            totalCount : data.total,
+            eventName : "selectReplyList"
+        };
+        gfn_renderPaging(params);
+         
+        //값을 가져와서 뿌려주는 부분
+        var repageNo = $("#repagenum").val();
+        var i=1;
+        var num = repageNo*20-20 ;
+
+        var str="";
+        var btn="";
+        
+        $.each(data.replyList, function(key, value){
+        	if(num < 0)
+        		num = 0;
+            var reCount = 0;
+            
+        	
+        	str += "<tr>"+
+        			"<td><b>" + value.member_id + "</b></td> "+
+        			"<td><input class='reply' type='text' readonly='readonly' style='border:none;' "+"" +
+        					"value='"+value.reply+"' id='re"+value.reply_num+"<%=re%>'></td>" +
+        			"<td>" + value.time + "</td>"+
+        			"</tr>";
+        	
+        });
+        var anchor = "<a id='page"+repageNo+"'>";
+        addpoint.append(str);
+}
+
+function callbackReplyInsert(data){
+	
+    var total = data.total;
+    var totalpnum = Math.ceil(total/9);
+    var addpoint = $("#addlist");
+    
+	var params = {
+            divId : "pagenav",
+            pageIndex : "pagenum",
+            totalCount : data.total,
+            eventName : "selectReplyList"
+        };
+        gfn_renderPaging(params);
+         
+        //값을 가져와서 뿌려주는 부분
+        var repageNo = $("#repagenum").val();
+        var i=1;
+        var num = repageNo*20-20 ;
+
+        var str="";
+        var btn="";
+        
+        $.each(data.replyList, function(key, value){
+        	if(num < 0)
+        		num = 0;
+            var reCount = 0;
+            
+        	
+        	str += "<tr>"+
+        			"<td><b>" + value.member_id + "</b></td> "+
+        			"<td><input class='reply' type='text' readonly='readonly' style='border:none;' "+"" +
+        					"value='"+value.reply+"' id='re"+value.reply_num+"<%=re%>'></td>" +
+        			"<td>" + value.time + "</td>"+
+        			"</tr>";
+        	
+        });
+        var anchor = "<a id='page"+repageNo+"'>";
         addpoint.append(str);
 }

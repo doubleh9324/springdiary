@@ -1,12 +1,14 @@
 package traveldiary.td.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ReplyDTO {
 	private String reply;
 	private int day_reply;
 	private int member_num;
-	private Date time;
+	private String member_id;
+	private String time;
 	private int reply_num;
 	private String del_flag;
 	
@@ -51,10 +53,10 @@ public class ReplyDTO {
 	}
 	
 	public void setTime(Date time){
-		this.time = time;
+		this.time = setDateFormat(time);
 	}
 	
-	public Date getTime(){
+	public String getTime(){
 		return this.time;
 	}
 	
@@ -64,5 +66,18 @@ public class ReplyDTO {
 
 	public int getReply_num(){
 		return this.reply_num;
+	}
+
+	public String getMember_id() {
+		return member_id;
+	}
+
+	public void setMember_id(String member_id) {
+		this.member_id = member_id;
+	}
+	
+	public String setDateFormat(Date d){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+		return formatter.format(d);
 	}
 }

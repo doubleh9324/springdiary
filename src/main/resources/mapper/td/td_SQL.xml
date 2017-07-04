@@ -325,6 +325,37 @@
 		]]>		
 	</select>
 	
+	<select id="selectOneReCount"
+			parameterType="hashmap"
+			resultType="hashmap">
+		<![CDATA[
+				SELECT
+					count(*)
+				FROM
+					reply
+				WHERE
+					del_flag = 'n' and
+					day_num = #{dnum}
+		]]>		
+	</select>
+	
+	<select id="selectReplyList"
+			parameterType="hashmap"
+			resultType="traveldiary.td.dto.ReplyDTO">
+	<![CDATA[
+			select
+				b.member_id, 
+				a.*
+			from 
+				reply a,
+				member b
+			where
+				a.del_flag='n' and
+				a.member_num = b.member_num and
+				a.day_num = #{dnum}
+		]]>		
+	</select>
+	
 	<resultMap type="traveldiary.td.dto.DiaryDTO" id="diary">
 		<result property="member_num" column="MEMBER_NUM"/>
 		<result property="diary_volum" column="DIARY_VOLUM"/>
